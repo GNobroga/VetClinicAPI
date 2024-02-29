@@ -34,6 +34,7 @@ public class DogEntity extends BaseEntity {
     @Column(name = "birth_date", nullable = true)
     private LocalDate birthDate;
 
+    @Column(name = "registration_date", nullable = false)
     private LocalDate registrationDate;
 
     @JoinColumn(name = "client_id", nullable = false)

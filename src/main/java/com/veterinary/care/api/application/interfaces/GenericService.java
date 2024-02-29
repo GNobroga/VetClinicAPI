@@ -5,15 +5,15 @@ import org.springframework.data.domain.PageRequest;
 
 import com.veterinary.care.api.domain.entities.base.BaseEntity;
 
-public interface GenericService<TEntity extends BaseEntity, TModel> {
+public interface GenericService<TEntity extends BaseEntity, TRecordModel, TProjectionModel> {
     
-    Page<TModel> findAll(PageRequest pageRequest);
+    Page<TProjectionModel> findAll(PageRequest pageRequest);
 
-    TModel findById(Long id);
+    TProjectionModel findById(Long id);
 
-    TModel create(TModel model);
+    TProjectionModel create(TRecordModel model);
 
-    TModel update(Long id, TModel model);
+    TProjectionModel update(Long id, TRecordModel model);
 
     boolean delete(Long id);
 }

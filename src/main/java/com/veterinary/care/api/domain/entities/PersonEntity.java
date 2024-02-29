@@ -16,6 +16,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +27,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class PersonEntity extends BaseEntity {
 
     @Column(name = "name",  length = 255, nullable = false)
@@ -48,7 +50,7 @@ public class PersonEntity extends BaseEntity {
     private String email;
 
     @JoinColumn(name = "user_id", nullable = false)
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private UserEntity user;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
@@ -57,6 +59,7 @@ public class PersonEntity extends BaseEntity {
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
     private VeterinaryEntity veterinary;
 
+    @Builder.Default
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
     private List<AddressEntity> addresses = new ArrayList<>();
 }

@@ -1,20 +1,24 @@
 package com.veterinary.care.api.application.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.veterinary.care.api.application.interfaces.PersonService;
 import com.veterinary.care.api.application.models.RecordPerson;
-import com.veterinary.care.api.application.projection.PersonProjection;
-
+import com.veterinary.care.api.domain.projection.PersonProjection;
+import com.veterinary.care.api.insfrastructure.repositories.PersonJpaRepository;
 
 @Service
 public class PersonServiceImpl implements PersonService  {
 
+    @Autowired
+    private PersonJpaRepository repository;
+
     @Override
     public Page<PersonProjection> findAll(PageRequest pageRequest) {
-       return null;
+        return repository.findAllWithProjection(pageRequest);
     }
 
     @Override

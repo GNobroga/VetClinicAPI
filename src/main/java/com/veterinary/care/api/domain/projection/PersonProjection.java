@@ -1,4 +1,4 @@
-package com.veterinary.care.api.application.projection;
+package com.veterinary.care.api.domain.projection;
 
 import java.time.LocalDate;
 

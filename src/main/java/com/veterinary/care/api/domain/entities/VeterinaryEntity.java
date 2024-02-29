@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class VeterinaryEntity extends BaseEntity {
     
     @Column(name = "registration_date", nullable = false)
@@ -41,6 +43,7 @@ public class VeterinaryEntity extends BaseEntity {
     @ManyToOne
     private PersonEntity person;
 
+    @Builder.Default
     @OneToMany(mappedBy = "veterinary")
     private List<AttendanceEntity> attendances = new ArrayList<>();
 }

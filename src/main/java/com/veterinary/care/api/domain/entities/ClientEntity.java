@@ -13,6 +13,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,15 +24,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ClientEntity extends BaseEntity {
     
     @Column(name = "registration_date", nullable = false)
-    private LocalDate registrationDate = LocalDate.now();
+    private LocalDate registrationDate;
 
     @JoinColumn(name = "person_id", nullable = false)
     @OneToOne
     private PersonEntity person;
 
+    @Builder.Default
     @OneToMany(mappedBy = "client")
     private List<DogEntity> dogs = new ArrayList<>();
 }

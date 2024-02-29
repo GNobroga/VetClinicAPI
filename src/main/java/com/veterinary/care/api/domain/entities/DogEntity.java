@@ -13,6 +13,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 public class DogEntity extends BaseEntity {
     
     @Column(name = "name", nullable = false, length = 255)
@@ -41,6 +43,7 @@ public class DogEntity extends BaseEntity {
     @ManyToOne
     private ClientEntity client;
 
+    @Builder.Default
     @OneToMany(mappedBy = "dog")
     private List<AttendanceEntity> attendances = new ArrayList<>();
     

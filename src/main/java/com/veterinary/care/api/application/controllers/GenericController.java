@@ -42,7 +42,7 @@ public class GenericController<TEntity extends BaseEntity, TModel, TProjection, 
             @RequestParam(defaultValue = "ASC") String order) {
 
         page = page <= 0 ? 1 : page;
-        size = size > 50 ? 50 : size;
+        size = size > 50 ? 50 : size <= 0 ? 10 : size;
             
         var sortDirection = order.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
         var data = service.findAll(PageRequest.of(page, size, sortDirection, "id"));

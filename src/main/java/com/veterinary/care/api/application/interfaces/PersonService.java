@@ -6,4 +6,5 @@ import com.veterinary.care.api.domain.entities.PersonEntity;
 
 public interface PersonService extends GenericService<PersonEntity, RecordPerson, PersonProjection> {
     
+    
 }

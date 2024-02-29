@@ -18,7 +18,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
-public class GenericController<TEntity extends BaseEntity, TModel, TProjectionModel, TService extends GenericService<TEntity, TModel, TProjectionModel>> {
+public class GenericController<TEntity extends BaseEntity, TModel, TProjection, TService extends GenericService<TEntity, TModel, TProjection>> {
 
     @Autowired
     private TService service;
@@ -33,7 +33,7 @@ public class GenericController<TEntity extends BaseEntity, TModel, TProjectionMo
             })
         }
     )
-    public ResponseEntity<List<TProjectionModel>> onGetMethod(
+    public ResponseEntity<List<TProjection>> onGetMethod(
             @Parameter(name = "size", description = "quantidade de itens", schema = @Schema(type = "integer"))
             @RequestParam(defaultValue = "1") int size, 
             @Parameter(name = "page", description = "página desejada", schema = @Schema(type = "integer"))

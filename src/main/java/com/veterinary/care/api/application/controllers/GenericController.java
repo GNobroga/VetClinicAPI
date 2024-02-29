@@ -35,13 +35,13 @@ public class GenericController<TEntity extends BaseEntity, TModel, TProjectionMo
     )
     public ResponseEntity<List<TProjectionModel>> onGetMethod(
             @Parameter(name = "size", description = "quantidade de itens", schema = @Schema(type = "integer"))
-            @RequestParam int size, 
+            @RequestParam(defaultValue = "1") int size, 
             @Parameter(name = "page", description = "página desejada", schema = @Schema(type = "integer"))
-            @RequestParam int page, 
+            @RequestParam(defaultValue = "10") int page, 
             @Parameter(name = "order", description = "ordenação ASC ou DESC", schema = @Schema(type = "string", defaultValue = "ASC"))
             @RequestParam(defaultValue = "ASC") String order) {
         var sortDirection = order.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        var data = service.findAll(PageRequest.of(page, size > 50 ? 50 : size, sortDirection, "id"));
+        var data = service.findAll(PageRequest.of(page <= 0 ? 1 : page, size > 50 ? 50 : size, sortDirection, "id"));
         return ResponseEntity.ok(data.getContent());
     }
 

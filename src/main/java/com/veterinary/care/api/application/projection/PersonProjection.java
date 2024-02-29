@@ -8,6 +8,8 @@ public interface PersonProjection {
 
     LocalDate getBirthDate();
 
+    String getType();
+
     String getDocument();
 
     String getPhone();
@@ -17,6 +19,5 @@ public interface PersonProjection {
     String getUsername();
 
     LocalDate getRegistrationDate();
-
 
 }

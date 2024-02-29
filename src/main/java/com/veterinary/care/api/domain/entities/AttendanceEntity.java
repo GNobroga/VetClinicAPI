@@ -1,15 +1,11 @@
 package com.veterinary.care.api.domain.entities;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 import com.veterinary.care.api.domain.entities.base.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -24,7 +20,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Attendance extends BaseEntity {
+public class AttendanceEntity extends BaseEntity {
 
     @Column(name = "attendance_date", nullable = false)
     private LocalDateTime attendanceDate;
@@ -46,13 +42,13 @@ public class Attendance extends BaseEntity {
 
     @JoinColumn(name = "dog_id", nullable = false)
     @ManyToOne
-    private Dog dog;
+    private DogEntity dog;
 
     @JoinColumn(name = "client_id", nullable = false)
     @ManyToOne
-    private Client client;
+    private ClientEntity client;
 
     @JoinColumn(name = "vet_id", nullable = false)
     @ManyToOne
-    private Veterinary veterinary;
+    private VeterinaryEntity veterinary;
 }

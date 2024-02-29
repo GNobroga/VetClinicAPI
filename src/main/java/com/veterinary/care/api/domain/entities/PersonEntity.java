@@ -11,7 +11,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -27,7 +26,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Person extends BaseEntity {
+public class PersonEntity extends BaseEntity {
 
     @Column(name = "name",  length = 255, nullable = false)
     private String name;
@@ -50,8 +49,14 @@ public class Person extends BaseEntity {
 
     @JoinColumn(name = "user_id", nullable = false)
     @OneToOne
-    private User user;
+    private UserEntity user;
 
     @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
-    private Client client;
+    private ClientEntity client;
+
+    @OneToOne(mappedBy = "person", cascade = CascadeType.ALL)
+    private VeterinaryEntity veterinary;
+
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    private List<AddressEntity> addresses = new ArrayList<>();
 }

@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Dog extends BaseEntity {
+public class DogEntity extends BaseEntity {
     
     @Column(name = "name", nullable = false, length = 255)
     private String name;
@@ -38,9 +38,9 @@ public class Dog extends BaseEntity {
 
     @JoinColumn(name = "client_id", nullable = false)
     @ManyToOne
-    private Client client;
+    private ClientEntity client;
 
     @OneToMany(mappedBy = "dog")
-    private List<Attendance> attendances = new ArrayList<>();
+    private List<AttendanceEntity> attendances = new ArrayList<>();
     
 }

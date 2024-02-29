@@ -18,7 +18,5 @@ public interface PersonProjection {
 
     LocalDate getRegistrationDate();
 
-    
-
 
 }

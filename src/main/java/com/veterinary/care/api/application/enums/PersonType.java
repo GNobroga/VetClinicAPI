@@ -1,15 +1,14 @@
 package com.veterinary.care.api.application.enums;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @Getter
 public enum PersonType {
-    CLIENT("CLIENT"),
-    VETERINARY("VETERINARY");
+    CLIENT("client", "pessoa que solicita um atendimento"),
+    VETERINARY("veterinary", "pessoa que realiza um atendimento");
 
-    private String value;
-
-    private PersonType(String value) {
-        this.value = value;
-    }
+    private final String type;
+    private final String description;
 }

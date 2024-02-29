@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class User extends BaseEntity {
+public class UserEntity extends BaseEntity {
 
     @Column(name = "username", length = 255)
     private String username;
@@ -32,7 +32,7 @@ public class User extends BaseEntity {
     private String password;
 
     @OneToOne(mappedBy = "user")
-    private Person person;
+    private PersonEntity person;
 
     @JoinTable(
         name = "tb_user_role",
@@ -40,5 +40,5 @@ public class User extends BaseEntity {
         inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
     )
     @ManyToMany
-    private List<Role> roles = new ArrayList<>();
+    private List<RoleEntity> roles = new ArrayList<>();
 }

@@ -23,7 +23,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class Address extends BaseEntity {
+public class AddressEntity extends BaseEntity {
 
     @Column(name = "public_place", length = 255, nullable = false)
     private String place; 
@@ -43,6 +43,6 @@ public class Address extends BaseEntity {
 
     @JoinColumn(name = "person_id", nullable = false)
     @ManyToOne
-    private Person person;
+    private PersonEntity person;
    
 }

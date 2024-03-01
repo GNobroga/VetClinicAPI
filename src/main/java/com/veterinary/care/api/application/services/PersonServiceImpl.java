@@ -18,7 +18,10 @@ public class PersonServiceImpl implements PersonService  {
 
     @Override
     public Page<PersonProjection> findAll(PageRequest pageRequest) {
-        return repository.findAllWithProjection(pageRequest);
+        var result = repository.findAllWithProjection(pageRequest);
+        System.out.println(result.getTotalElements());
+        System.out.println(result);
+        return result;
     }
 
     @Override

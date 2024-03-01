@@ -1,6 +1,10 @@
 package com.veterinary.care.api.domain.projection;
 
 import java.time.LocalDate;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
+
 
 public interface PersonProjection {
     
@@ -16,8 +20,19 @@ public interface PersonProjection {
 
     String getEmail();
 
+    @Value("#{target.user.username}")
     String getUsername();
 
-    LocalDate getRegistrationDate();
+    @Value("#{target.addresses}")
+    List<AddressProjection> getAddresses();
+
+    interface AddressProjection {
+        Long getId();
+        String getPlace();
+        String getNumber();
+        String getComplement();
+        String getZipCode();
+        String getType();
+    }
 
 }

@@ -5,11 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.veterinary.care.api.application.interfaces.GenericService;
+import com.veterinary.care.api.application.utils.ResponseHandler;
 import com.veterinary.care.api.domain.entities.base.BaseEntity;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,25 +28,39 @@ public class GenericController<TEntity extends BaseEntity, TModel, TProjection, 
         summary = "Retorna lista de objetos dessa entidade", 
         description = "Descrição", 
         responses = {
-            @ApiResponse(description = "A lista objetos foi retornada", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ResponseEntity.class))
+            @ApiResponse(description = "A lista objetos foi retornada", responseCode = "200", content = {
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", 
+                example = """
+                    {
+                        "status": "ok",
+                        "code": "200",
+                        "messages": [],
+                        "result": []
+                    }
+                    """
+                ))
             })
         }
     )
-    public ResponseEntity<List<TProjection>> onGetMethod(
-            @Parameter(name = "size", description = "quantidade de itens", schema = @Schema(type = "integer"))
-            @RequestParam(defaultValue = "1") int size, 
-            @Parameter(name = "page", description = "página desejada", schema = @Schema(type = "integer"))
-            @RequestParam(defaultValue = "10") int page, 
+    public ResponseHandler<List<TProjection>> onGetMethod(
+            @Parameter(name = "size", description = "página desejada", schema = @Schema(type = "integer", defaultValue = "0"))
+            @RequestParam(defaultValue = "0") 
+                int pageNumber, 
+            @Parameter(name = "page", description = "quantidade de itens (limite é 50)", schema = @Schema(type = "integer", defaultValue = "10"))
+            @RequestParam(defaultValue = "10") 
+                int pageSize, 
             @Parameter(name = "order", description = "ordenação ASC ou DESC", schema = @Schema(type = "string", defaultValue = "ASC"))
-            @RequestParam(defaultValue = "ASC") String order) {
+            @RequestParam(defaultValue = "ASC") 
+                String order) {
+        
+        pageNumber = pageNumber < 0 ? 0 : pageNumber;
+        pageSize = pageSize > 50 ? 50 : pageSize;
 
-        page = page <= 0 ? 1 : page;
-        size = size > 50 ? 50 : size <= 0 ? 10 : size;
+        System.out.println("Pagina " + pageSize);
             
         var sortDirection = order.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        var data = service.findAll(PageRequest.of(page, size, sortDirection, "id"));
-        return ResponseEntity.ok(data.getContent());
+        var data = service.findAll(PageRequest.of(pageNumber, pageSize, sortDirection, "id"));
+        return new ResponseHandler<List<TProjection>>(data.getContent());
     }
 
 }

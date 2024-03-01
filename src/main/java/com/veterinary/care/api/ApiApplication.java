@@ -8,7 +8,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.veterinary.care.api.application.enums.AddressType;
 import com.veterinary.care.api.application.enums.PersonType;
+import com.veterinary.care.api.domain.entities.AddressEntity;
 import com.veterinary.care.api.domain.entities.PersonEntity;
 import com.veterinary.care.api.domain.entities.UserEntity;
 import com.veterinary.care.api.insfrastructure.repositories.PersonJpaRepository;
@@ -39,8 +41,25 @@ public class ApiApplication {
 
 			person.user(user);
 
-			repository.save(person.build());
+
+			var personBuilded = person.build();
+
+			var address = AddressEntity.builder()
+				.place("Avenida")
+				.number("95")
+				.type(AddressType.WORK)
+				.zipCode("999")
+				.complement("Não definido")
+				.person(personBuilded)
+				.build();
+
+			var addresses = new ArrayList<AddressEntity>();
+			addresses.add(address);
+
+			personBuilded.setAddresses(addresses);
 			
+			repository.save(personBuilded);
+			repository.flush();
 		};
 	}
 

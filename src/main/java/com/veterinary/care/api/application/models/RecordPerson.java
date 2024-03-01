@@ -1,6 +1,6 @@
 package com.veterinary.care.api.application.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -26,11 +26,19 @@ public record RecordPerson(
         @NotBlank(message = "O telefone é obrigatório.")
         String phone,
 
-        @NotBlank(message = "O email é obrigatório.")
         @Email(message = "O email precisa ser válido.")
         String email,
 
+        @Size(max = 100, message = "A username pode ter no máximo 100 caracteres.")
+        @NotBlank(message = "O username é obrigatório.")
+        String username,
+
+        @Size(max = 100, message = "A senha pode ter no máximo 100 caracteres.")
+        @NotBlank(message = "A senha é obrigatório.")
+        String password,
+
+        @NotNull(message = "O addresses é obrigatório.")
         @Valid
-        @NotNull(message = "O user é obrigatório")
-        RecordUser user) {
+        List<RecordAddress> addresses
+        ) {
 }

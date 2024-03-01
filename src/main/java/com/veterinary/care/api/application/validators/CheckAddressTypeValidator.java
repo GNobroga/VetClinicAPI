@@ -14,7 +14,7 @@ public class CheckAddressTypeValidator implements ConstraintValidator<CheckAddre
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         AddressType[] addressTypes = AddressType.values();
-        var values = Arrays.stream(addressTypes).map(x -> x.getType()).collect(Collectors.toList());
+        var values = Arrays.stream(addressTypes).map(x -> x.getType().toUpperCase()).collect(Collectors.toList());
 
         if (!values.contains(value)) {
             var existingTypes = values.stream().collect(Collectors.joining(","));

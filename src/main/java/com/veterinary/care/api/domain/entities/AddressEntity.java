@@ -39,7 +39,7 @@ public class AddressEntity extends BaseEntity {
     @Column(name = "zip_code", length =  255, nullable = false)
     private String zipCode;
 
-    @Column(name = "addresss_type", length = 20, nullable = false)
+    @Column(name = "address_type", length = 20, nullable = false)
     @Enumerated(EnumType.STRING)
     private AddressType type;
 

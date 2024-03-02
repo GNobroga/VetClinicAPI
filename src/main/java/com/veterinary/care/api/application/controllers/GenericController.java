@@ -39,13 +39,13 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
 
     @GetMapping
     @Operation(
-        summary = "Retorna lista de objetos dessa entidade", 
-        description = "Descrição", 
+        summary = "Retorna lista de objetos dessa entidade",
+        description = "Descrição",
         responses = {
             @ApiResponse(description = "A lista objetos foi retornada", responseCode = "200", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", 
-                example = """ 
-                    { 
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON",
+                example = """
+                    {
                         "status": "ok",
                         "code": "200",
                         "messages": [],
@@ -58,31 +58,31 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
     )
     public ResponseHandler<List<P>> onGetMethod(
             @Parameter(name = "size", description = "página desejada", schema = @Schema(type = "integer", defaultValue = "0"))
-            @RequestParam(defaultValue = "0") 
-                int pageNumber, 
+            @RequestParam(defaultValue = "0")
+                int pageNumber,
             @Parameter(name = "page", description = "quantidade de itens (limite é 50)", schema = @Schema(type = "integer", defaultValue = "10"))
-            @RequestParam(defaultValue = "10") 
-                int pageSize, 
+            @RequestParam(defaultValue = "10")
+                int pageSize,
             @Parameter(name = "order", description = "ordenação ASC ou DESC", schema = @Schema(type = "string", defaultValue = "ASC"))
-            @RequestParam(defaultValue = "ASC") 
+            @RequestParam(defaultValue = "ASC")
                 String order) {
-        
+
         pageNumber = pageNumber < 0 ? 0 : pageNumber;
         pageSize = pageSize > 50 ? 50 : pageSize;
-            
+
         var sortDirection = order.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
         var data = service.findAll(PageRequest.of(pageNumber, pageSize, sortDirection, "id"));
-        return new ResponseHandler<List<P>>(data.getContent());
+        return new ResponseHandler<List<P>>(data);
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(
-        summary = "Permite criar um objeto dessa entidade", 
-        description = "Descrição", 
+        summary = "Permite criar um objeto dessa entidade",
+        description = "Descrição",
         responses = {
             @ApiResponse(description = "Retorna a entidade criada", responseCode = "201", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", 
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON",
                 example = """
                     {
                         "status": "ok",

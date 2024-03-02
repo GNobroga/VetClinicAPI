@@ -5,12 +5,26 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({
+    "id",
+    "name",
+    "document",
+    "type",
+    "phone",
+    "birthDate",
+    "email",
+    "username",
+    "addresses"
+})
 public interface PersonProjection {
-    
+
     Long getId();
 
     LocalDate getBirthDate();
+
+    String getName();
 
     String getType();
 

@@ -37,15 +37,4 @@ public class MainConfiguration {
     // PasswordEncoder passwordEncoder() {
     //     return new BCryptPasswordEncoder();
     // }
-
-
-    @Value("{secret:Virgem}")
-    private String secret;
-
-    @Bean
-    ApplicationRunner runner() {
-       return (args) -> {
-        System.out.println(secret);
-       };
-    }
 }

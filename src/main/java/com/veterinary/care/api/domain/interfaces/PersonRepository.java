@@ -21,4 +21,7 @@ public interface PersonRepository {
     @Query("from PersonEntity p join fetch p.user u where p.email = :email or u.username = :username")
     Optional<PersonEntity> findByEmailOrUsername(@Param("email") String email, @Param("username") String username);
 
+    @Query("from PersonEntity p where p.document = :document")
+    Optional<PersonEntity> findByDocument(@Param("document") String document);
+
 }

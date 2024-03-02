@@ -30,10 +30,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 /**
- * E = Entity
- * M = Model
- * P = Projection
- * S = Service
+ *  Uma classe base com o padrão de métodos para controllers
+ * @param <E> Uma entidade que extende de BaseEntity
+ * @param <M> Um objeto de input
+ * @param <S> Um service que extende de GenericService
  */
 @Validated
 public class GenericController<E extends BaseEntity, M, P, S extends GenericService<E, M, P>> {

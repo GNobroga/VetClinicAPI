@@ -12,15 +12,11 @@ public class CheckCpfValidator implements ConstraintValidator<CheckDocument, Str
     @Override
     public boolean isValid(String document, ConstraintValidatorContext context) {
         var isValid = isCPF(document) || isCNPJ(document);
-
-        System.out.println("AAA" + isCNPJ(document) + " " + isCPF(document));
-
         if (!isValid) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("Documento inválido, não é CPF e nem CNPJ.")
                 .addConstraintViolation();
-        } 
-
+        }
         return isValid;
     }
 
@@ -46,7 +42,7 @@ public class CheckCpfValidator implements ConstraintValidator<CheckDocument, Str
         }
 
         sum = 0;
-        
+
         for (int i = 0; i < 10; i++) {
             sum += Character.getNumericValue(document.charAt(i)) * (11 - i);
         }
@@ -58,7 +54,7 @@ public class CheckCpfValidator implements ConstraintValidator<CheckDocument, Str
 
         return Character.getNumericValue(document.charAt(9)) == firstDigit && Character.getNumericValue(document.charAt(10)) == secondDigit;
     }
- 
+
     public static boolean isCNPJ(String cnpj) {
         cnpj = cnpj.replaceAll("[^0-9]", "");
 

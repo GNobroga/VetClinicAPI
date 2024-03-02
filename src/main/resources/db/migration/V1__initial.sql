@@ -36,14 +36,14 @@ create table tb_addresses (
     zip_code varchar(8) not null,
     address_type varchar(20) not null,
     person_id bigint not null,
-    constraint fk_tb_addresses_person foreign key (person_id) references tb_people(id)
+    constraint fk_tb_addresses_person foreign key (person_id) references tb_people(id) ON DELETE CASCADE
 );
 
 create table tb_clients (
     id bigserial primary key,
     registration_date date not null,
     person_id bigint not null,
-    constraint fk_tb_clients_person foreign key (person_id) references tb_people(id)
+    constraint fk_tb_clients_person foreign key (person_id) references tb_people(id) ON DELETE CASCADE
 );
 
 create table tb_vets (
@@ -53,7 +53,7 @@ create table tb_vets (
     crmv varchar(45) not null,
     crmv_uf varchar(2) not null,
     person_id bigint not null,
-    constraint fk_tb_vets_person foreign key (person_id) references tb_people(id)
+    constraint fk_tb_vets_person foreign key (person_id) references tb_people(id) ON DELETE CASCADE
 );
 
 create table tb_dogs (
@@ -63,7 +63,7 @@ create table tb_dogs (
     birth_date date null,
     registration_date date not null,
     client_id bigint not null,
-    constraint fk_tb_dogs_client foreign key (client_id) references tb_clients(id)
+    constraint fk_tb_dogs_client foreign key (client_id) references tb_clients(id) ON DELETE CASCADE
 );
 
 create table tb_attendances (

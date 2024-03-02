@@ -8,15 +8,15 @@ import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @JsonPropertyOrder({
-    "id",
-    "name",
-    "document",
-    "type",
-    "phone",
-    "birthDate",
-    "email",
-    "username",
-    "addresses"
+        "id",
+        "name",
+        "document",
+        "type",
+        "phone",
+        "birthDate",
+        "email",
+        "username",
+        "addresses"
 })
 public interface PersonProjection {
 
@@ -42,10 +42,15 @@ public interface PersonProjection {
 
     interface AddressProjection {
         Long getId();
+
         String getPlace();
+
         String getNumber();
+
         String getComplement();
+
         String getZipCode();
+
         String getType();
     }
 

@@ -1,4 +1,9 @@
 spring:
+
+    devtools:
+        restart:
+            enabled: false
+
     datasource:
         url: jdbc:postgresql://db:5432/backend
         username: db

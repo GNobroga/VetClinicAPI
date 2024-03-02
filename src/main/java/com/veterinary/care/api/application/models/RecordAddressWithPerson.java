@@ -11,21 +11,21 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Schema(
-    name = "Endereço com id da pessoa",
+    name = "Endereço Cadastro",
     description = "Exemplo de um payload para cadastrar Endereço",
-    example = "{ \"place\": \"São Joaquim\", \"number\": \"100\", \"complement\": \"Atrás da academia\", \"cep\": \"29360-000\", \"type\": \"HOME\", \"personId\": 1}"
+    example = "{\"place\": \"São Joaquim\", \"number\": \"100\", \"complement\": \"Atrás da academia\", \"cep\": \"29360-000\", \"type\": \"HOME\", \"personId\": 1}"
 )
-@CheckEnumType(className = RecordAddressWithPersonId.class)
-public record RecordAddressWithPersonId(
-     @Size(max = 255, message = "O place só pode ter no máximo 255 caracteres")
-        @NotBlank(message = "O place é obrigatório")
+@CheckEnumType(className = RecordAddressWithPerson.class)
+public record RecordAddressWithPerson(
+        @Size(max = 255, message = "O place só pode ter no máximo 255 caracteres.")
+        @NotBlank(message = "O place é obrigatório.")
         String place,
 
-        @Size(max = 15, message = "O number só pode ter no máximo 15 caracteres")
-        @NotBlank(message = "O number é obrigatório")
+        @Size(max = 15, message = "O number só pode ter no máximo 15 caracteres.")
+        @NotBlank(message = "O number é obrigatório.")
         String number,
 
-        @Size(max = 255, message = "O complemento pode ter no máximo 255 caracteres")
+        @Size(max = 255, message = "O complemento pode ter no máximo 255 caracteres.")
         String complement,
 
         @JsonProperty("cep")
@@ -34,10 +34,10 @@ public record RecordAddressWithPersonId(
         String zipCode,
 
         @CheckEnumType.EnumType(AddressType.class)
+        @NotNull(message = "O type é obrigatório")
         String type,
 
-        @NotNull(message = "A identificação da pessoa é obrigatória")
+        @NotNull(message = "O personId é obrigatório")
         Long personId
-)  {
-
+    ) {
 }

@@ -10,7 +10,7 @@ import com.veterinary.care.api.application.exceptions.NegociationException;
 import com.veterinary.care.api.application.interfaces.AddressService;
 import com.veterinary.care.api.application.interfaces.CepService;
 import com.veterinary.care.api.application.mappers.AddressMapper;
-import com.veterinary.care.api.application.models.RecordAddressWithPersonId;
+import com.veterinary.care.api.application.models.RecordAddressWithPerson;
 import com.veterinary.care.api.domain.projection.AddressProjection;
 import com.veterinary.care.api.insfrastructure.AddressJpaRepository;
 import com.veterinary.care.api.insfrastructure.PersonJpaRepository;
@@ -48,38 +48,43 @@ public class AddressServiceImpl implements AddressService {
         return repository.getProjectionById(id);
     }
 
+
     @SuppressWarnings("null")
     @Override
-    public AddressProjection create(RecordAddressWithPersonId model) {
-
-        if (model.personId() == null)
-            throw new NegociationException("A identificação da pessoa é necessária");
-
+    public AddressProjection create(RecordAddressWithPerson model) {
         if (!cepService.validate(cepService.normalizeCep(model.zipCode()))) {
             throw new NegociationException("O cep não foi encontrado");
         }
 
-        var optionalPerson = personJpaRepository.findById(model.personId());
+        var person = personJpaRepository.findById(model.personId())
+            .orElseThrow(() -> new NegociationException("Não há pessoa com a identificação informada"));
 
-        if (!optionalPerson.isPresent()) {
-            throw new NegociationException("Não há pessoa com a identificação informada");
-        }
-
-        var person = optionalPerson.get();
         var entity = mapper.toEntity(model);
         entity.setPerson(person);
         return repository.getProjectionById(repository.save(entity).getId());
     }
 
     @Override
-    public AddressProjection update(Long id, RecordAddressWithPersonId model) {
+    public AddressProjection update(Long id, RecordAddressWithPerson model) {
         if (id == null)
-            throw new NegociationException("O id não pode ser nulo");
+            throw new NegociationException("O id é obrigatório");
 
-        var entity = repository.findById(id).orElseThrow(() -> new NegociationException("O endereço não está cadastrado"));
+        var entity = repository.findById(id)
+            .orElseThrow(() -> new NegociationException("O endereço não está cadastrado"));
+
+        if (!cepService.validate(cepService.normalizeCep(model.zipCode())))
+            throw new NegociationException("O cep não foi encontrado");
 
 
-        return null;
+        if (entity.getPerson().getId() != model.personId())
+            throw new NegociationException("Não é possível alterar a identificação da pessoa");
+
+
+        mapper.toEntity(entity, model);
+
+        repository.saveAndFlush(entity);
+
+        return repository.getProjectionById(id);
 
     }
 
@@ -89,5 +94,6 @@ public class AddressServiceImpl implements AddressService {
             throw new NegociationException("O id não pode ser nulo");
         repository.deleteById(id);
     }
+
 
 }

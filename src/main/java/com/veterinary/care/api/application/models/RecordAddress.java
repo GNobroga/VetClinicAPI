@@ -6,6 +6,7 @@ import com.veterinary.care.api.application.validators.constraints.CheckEnumType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
@@ -33,6 +34,7 @@ public record RecordAddress(
         String zipCode,
 
         @CheckEnumType.EnumType(AddressType.class)
+        @NotNull(message = "O type é obrigatório")
         String type
     ) {
 }

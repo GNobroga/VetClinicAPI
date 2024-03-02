@@ -6,7 +6,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 import com.veterinary.care.api.application.models.RecordAddress;
-import com.veterinary.care.api.application.models.RecordAddressWithPersonId;
+import com.veterinary.care.api.application.models.RecordAddressWithPerson;
 import com.veterinary.care.api.domain.entities.AddressEntity;
 
 @Mapper
@@ -18,7 +18,9 @@ public interface AddressMapper {
     AddressEntity toEntity(RecordAddress source);
 
     @Mapping(target = "person", ignore = true)
-    AddressEntity toEntity(RecordAddressWithPersonId source);
+    AddressEntity toEntity(RecordAddressWithPerson source);
 
-    void toEntity(AddressEntity target, @MappingTarget RecordAddressWithPersonId source);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "person", ignore = true)
+    void toEntity(@MappingTarget AddressEntity target, RecordAddressWithPerson source);
 }

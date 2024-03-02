@@ -26,8 +26,8 @@ import lombok.Setter;
 @Setter
 @Builder
 public class VeterinaryEntity extends BaseEntity {
-    
-    @Column(name = "registration_date", nullable = false)
+
+    @Column(name = "registration_date", nullable = false, columnDefinition = "DATE")
     private String registrationDate;
 
     @Column(name = "specialty", nullable = false, length = 255)

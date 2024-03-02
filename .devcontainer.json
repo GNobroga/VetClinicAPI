@@ -1,0 +1,36 @@
+{
+    "name": "Vet Clinic Backend",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "backend",
+    "workspaceFolder": "/workspaces",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                "java.compile.nullAnalysis.mode": "automatic",
+                "java.configuration.updateBuildConfiguration": "automatic",
+                "java.debug.settings.onBuildFailureProceed": true,
+                "spring.profiles.active": "dev",
+                "files.trimTrailingWhitespace": true,
+                "editor.trimAutoWhitespace": true,
+                "editor.insertSpaces": true,
+                "editor.tabSize": 4,
+                "[java]": {
+                    "editor.detectIndentation": false,
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": true
+                    }
+                }
+            },
+            "extensions": [
+                "eamodio.gitlens", 
+                "vscjava.vscode-java-pack",
+                "vscjava.vscode-spring-boot-dashboard",
+                "mhutchie.git-graph", 
+                "Cardinal90.multi-cursor-case-preserve",
+                "Gruntfuggly.todo-tree", 
+                "maptz.regionfolder",
+                "vmware.vscode-spring-boot" 
+            ]
+        }
+    }
+}

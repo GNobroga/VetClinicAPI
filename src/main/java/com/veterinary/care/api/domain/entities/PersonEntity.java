@@ -44,9 +44,9 @@ public class PersonEntity extends BaseEntity {
     @Column(name = "cpf_cnpj", length = 14, nullable = false)
     private String document;
 
-    @Column(name = "birth_date", nullable = false)
+    @Column(name = "birth_date", nullable = false, columnDefinition = "DATE")
     private LocalDate birthDate;
-    
+
     @Column(name = "phone", length = 45, nullable = false)
     private String phone;
 

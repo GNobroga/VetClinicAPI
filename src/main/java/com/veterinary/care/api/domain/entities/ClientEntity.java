@@ -26,8 +26,8 @@ import lombok.Setter;
 @Setter
 @Builder
 public class ClientEntity extends BaseEntity {
-    
-    @Column(name = "registration_date", nullable = false)
+
+    @Column(name = "registration_date", nullable = false, columnDefinition = "DATE")
     private LocalDate registrationDate;
 
     @JoinColumn(name = "person_id", nullable = false)

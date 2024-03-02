@@ -1,5 +1,7 @@
 package com.veterinary.care.api.application.configuration;
 
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 // import org.springframework.security.authentication.AuthenticationManager;
@@ -10,28 +12,40 @@ import org.springframework.context.annotation.Configuration;
 // import org.springframework.security.crypto.password.PasswordEncoder;
 // import org.springframework.security.web.SecurityFilterChain;
 
+
 @Configuration
 public class MainConfiguration {
     // @Bean
     // SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     //     http.csrf(csrf -> csrf.disable());
     //     http.sessionManagement(
-    //         sessionManagement -> 
+    //         sessionManagement ->
     //             sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     //     http.authorizeHttpRequests(
-    //         authorize -> 
+    //         authorize ->
     //             authorize.anyRequest().permitAll()
     //     );
     //     return http.build();
     // }
-    
+
     // @Bean
     // AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
     //     return authenticationConfiguration.getAuthenticationManager();
     // }
-    
+
     // @Bean
     // PasswordEncoder passwordEncoder() {
     //     return new BCryptPasswordEncoder();
     // }
+
+
+    @Value("{secret:Virgem}")
+    private String secret;
+
+    @Bean
+    ApplicationRunner runner() {
+       return (args) -> {
+        System.out.println(secret);
+       };
+    }
 }

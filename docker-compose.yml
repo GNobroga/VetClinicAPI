@@ -1,0 +1,33 @@
+version: "3.8"
+
+networks:
+  api-backend:
+
+services:
+
+  db:
+    container_name: db
+    image: postgres
+    environment:
+      POSTGRES_USER: db
+      POSTGRES_PASSWORD: db
+      POSTGRES_DB: backend
+    ports:
+      - 5432:5432
+    networks:
+      - api-backend
+
+  backend:
+    container_name: api
+    build:
+      context: ./.docker/backend
+    tty: true
+    volumes:
+      - .:/workspaces
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    networks:
+      - api-backend
+

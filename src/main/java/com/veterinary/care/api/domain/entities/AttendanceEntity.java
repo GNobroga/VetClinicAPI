@@ -24,20 +24,20 @@ import lombok.Setter;
 @Builder
 public class AttendanceEntity extends BaseEntity {
 
-    @Column(name = "attendance_date", nullable = false)
+    @Column(name = "attendance_date", nullable = false, columnDefinition = "DATE")
     private LocalDateTime attendanceDate;
-    
+
     @Column(name = "diagnosis", nullable = true)
     private String diagnosis;
 
     @Column(name = "comments", nullable = true)
     private String comments;
 
-    @Column(name = "dog_weight", nullable = true)
-    private Float dogWeight;
+    @Column(name = "dog_weight", nullable = true, columnDefinition = "NUMERIC(6, 2)")
+    private Double dogWeight;
 
-    @Column(name = "dog_height", nullable = true)
-    private Float dogHeight;
+    @Column(name = "dog_height", nullable = true, columnDefinition = "NUMERIC(6, 2)")
+    private Double dogHeight;
 
     @Column(name = "dog_temperament", length = 255, nullable = true)
     private String dogTemperament;

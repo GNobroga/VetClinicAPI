@@ -26,7 +26,7 @@ import lombok.Setter;
 @Setter
 @Builder
 public class DogEntity extends BaseEntity {
-    
+
     @Column(name = "name", nullable = false, length = 255)
     private String name;
 
@@ -36,7 +36,7 @@ public class DogEntity extends BaseEntity {
     @Column(name = "birth_date", nullable = true)
     private LocalDate birthDate;
 
-    @Column(name = "registration_date", nullable = false)
+    @Column(name = "registration_date", nullable = false, columnDefinition = "DATE")
     private LocalDate registrationDate;
 
     @JoinColumn(name = "client_id", nullable = false)
@@ -46,5 +46,5 @@ public class DogEntity extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "dog")
     private List<AttendanceEntity> attendances = new ArrayList<>();
-    
+
 }

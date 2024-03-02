@@ -1,16 +1,17 @@
 spring:
     datasource:
-        url: jdbc:h2:mem:testdb
+        url: jdbc:postgresql://db:5432/backend
         username: db
         password: db
-        driverClassName: org.h2.Driver
+        driver-class-name: org.postgresql.Driver
+
     jpa:
         hibernate:
-            ddl-auto: create
-        show-sql: false 
-        database-platform: org.hibernate.dialect.H2Dialect
+            ddl-auto: validate
+        show-sql: false
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
 
 springdoc:
     api-docs:
         path: /api-docs
-    
+

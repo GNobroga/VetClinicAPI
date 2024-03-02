@@ -2,18 +2,23 @@ package com.veterinary.care.api.application.models;
 
 import java.util.List;
 
+import com.veterinary.care.api.application.enums.PersonType;
+import com.veterinary.care.api.application.validators.constraints.CheckEnumType;
+
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+@CheckEnumType(className = RecordPerson.class)
 public record RecordPerson(
 
         @Size(max = 255, message = "O nome não pode ter mais de 255 caracteres")
         @NotBlank(message = "O nome não pode vazio.")
         String name,
 
+        @CheckEnumType.EnumType(PersonType.class)
         @NotBlank(message = "O tipo de pessoa não pode ser nulo")
         String type,
 

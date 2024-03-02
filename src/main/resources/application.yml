@@ -7,7 +7,7 @@ spring:
     jpa:
         hibernate:
             ddl-auto: create
-        show-sql: true
+        show-sql: false 
         database-platform: org.hibernate.dialect.H2Dialect
 
 springdoc:

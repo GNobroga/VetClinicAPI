@@ -6,21 +6,30 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.veterinary.care.api.application.validators.CheckAddressTypeValidator;
+import com.veterinary.care.api.application.validators.CheckEnumTypeValidator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-@Target(ElementType.FIELD)
-@Constraint(validatedBy = CheckAddressTypeValidator.class)
+@Target({ ElementType.TYPE })
+@Constraint(validatedBy = CheckEnumTypeValidator.class)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface CheckAddressType {
+public @interface CheckEnumType {
+ 
+    Class<?> className();
 
-    String message() default "O tipo endereço não bate com os tipos permitidos";
+    String message() default "Enum inválido";
 
     Class<?>[] groups() default { };
 
     Class<? extends Payload>[] payload() default { };
+
+    @Target({ ElementType.FIELD, ElementType.TYPE })
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface EnumType {
+        Class<?> value();
+        String message() default "O tipo é obrigatório";
+    } 
     
 }

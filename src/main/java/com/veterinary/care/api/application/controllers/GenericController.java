@@ -25,11 +25,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
+/**
+ * E = Entity
+ * M = Model
+ * P = Projection
+ * S = Service
+ */
 @Validated
-public class GenericController<TEntity extends BaseEntity, TModel, TProjection, TService extends GenericService<TEntity, TModel, TProjection>> {
+public class GenericController<E extends BaseEntity, M, P, S extends GenericService<E, M, P>> {
 
     @Autowired
-    private TService service;
+    private S service;
 
     @GetMapping
     @Operation(
@@ -38,8 +44,8 @@ public class GenericController<TEntity extends BaseEntity, TModel, TProjection, 
         responses = {
             @ApiResponse(description = "A lista objetos foi retornada", responseCode = "200", content = {
                 @Content(mediaType = "application/json", schema = @Schema(type = "JSON", 
-                example = """
-                    {
+                example = """ 
+                    { 
                         "status": "ok",
                         "code": "200",
                         "messages": [],
@@ -50,7 +56,7 @@ public class GenericController<TEntity extends BaseEntity, TModel, TProjection, 
             })
         }
     )
-    public ResponseHandler<List<TProjection>> onGetMethod(
+    public ResponseHandler<List<P>> onGetMethod(
             @Parameter(name = "size", description = "página desejada", schema = @Schema(type = "integer", defaultValue = "0"))
             @RequestParam(defaultValue = "0") 
                 int pageNumber, 
@@ -66,7 +72,7 @@ public class GenericController<TEntity extends BaseEntity, TModel, TProjection, 
             
         var sortDirection = order.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
         var data = service.findAll(PageRequest.of(pageNumber, pageSize, sortDirection, "id"));
-        return new ResponseHandler<List<TProjection>>(data.getContent());
+        return new ResponseHandler<List<P>>(data.getContent());
     }
 
     @PostMapping
@@ -89,8 +95,8 @@ public class GenericController<TEntity extends BaseEntity, TModel, TProjection, 
             })
         }
     )
-    public ResponseHandler<TProjection> onPostMethod(
-        @RequestBody @Valid  TModel model
+    public ResponseHandler<P> onPostMethod(
+        @RequestBody @Valid M model
     ) {
         System.out.println(model);
         return new ResponseHandler<>(Status.OK, HttpStatus.CREATED, service.create(model));

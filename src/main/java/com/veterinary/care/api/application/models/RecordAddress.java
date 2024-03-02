@@ -1,10 +1,12 @@
 package com.veterinary.care.api.application.models;
 
-import com.veterinary.care.api.application.validators.constraints.CheckAddressType;
+import com.veterinary.care.api.application.enums.AddressType;
+import com.veterinary.care.api.application.validators.constraints.CheckEnumType;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+@CheckEnumType(className = RecordAddress.class)
 public record RecordAddress(
         @Size(max = 255, message = "O place só pode ter no máximo 255 caracteres.")
         @NotBlank(message = "O place é obrigatório.")
@@ -21,8 +23,7 @@ public record RecordAddress(
         @NotBlank(message = "O zipCode é obrigatório.")
         String zipCode,
 
-        @NotBlank(message = "O type é obrigatório.")
-        @CheckAddressType
+        @CheckEnumType.EnumType(AddressType.class)
         String type
     ) {
 }

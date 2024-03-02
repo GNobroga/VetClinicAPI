@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,6 +73,23 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
         return new ResponseHandler<List<P>>(data);
     }
 
+    @GetMapping("/{id}")
+    @Operation(
+        summary = "Retorna lista de objetos dessa entidade",
+        description = "Descrição",
+        responses = {
+            @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
+            }),
+            @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
+            })
+        }
+    )
+    public ResponseHandler<P> onGetMethod(@PathVariable Long id) {
+        return new ResponseHandler<P>(service.findById(id));
+    }
+
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(
@@ -112,6 +131,28 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
         @RequestBody @Valid M model
     ) {
         return new ResponseHandler<>(Status.OK, HttpStatus.OK, service.update(id, model));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(code = HttpStatus.NO_CONTENT)
+    @Operation(
+        summary = "Permite atualizar um objeto dessa entidade",
+        description = "Descrição",
+        responses = {
+            @ApiResponse(description = "Retorna a entidade atualizada", responseCode = "204", content = {
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
+            }),
+            @ApiResponse(description = "Objeto de resposta", responseCode = "400", content = {
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
+            })
+        }
+    )
+    public ResponseEntity<?> onDeleteMethod(
+        @Parameter(name = "id", description =  "id da entidade a ser deletada")
+        @PathVariable Long id
+    ) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 
 

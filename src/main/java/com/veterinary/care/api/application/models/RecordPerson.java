@@ -22,7 +22,7 @@ import jakarta.validation.constraints.Size;
 @CheckEnumType(className = RecordPerson.class)
 public record RecordPerson(
 
-        @Size(max = 255, message = "O nome não pode ter mais de 255 caracteres")
+        @Size(min = 2, max = 255, message = "O nome não pode ter mais de 255 caracteres e deve ter no mínimo 2 caracteres")
         @NotBlank(message = "O nome não pode vazio.")
         String name,
 
@@ -38,9 +38,10 @@ public record RecordPerson(
         @NotBlank(message = "A data de nascimento é obrigatório.")
         String birthDate,
 
+        @Size(min = 8, max = 255, message = "O nome não pode ter mais de 45 caracteres e deve ter no mínimo 8 caracteres")
         @NotBlank(message = "O telefone é obrigatório.")
         String phone,
-
+        
         @Email(message = "O email precisa ser válido.")
         String email,
 

@@ -44,8 +44,11 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
         summary = "Retorna lista de objetos dessa entidade",
         description = "Descrição",
         responses = {
-            @ApiResponse(description = "A lista objetos foi retornada", responseCode = "200", content = {
+            @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
                 @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
+            }),
+            @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
             })
         }
     )
@@ -78,7 +81,7 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
                 @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"201\",\"messages\":[],\"result\":[]}"))
             }),
             @ApiResponse(description = "Objeto de resposta", responseCode = "400", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":[]}"))
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
             })
         }
     )
@@ -99,7 +102,7 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
                 @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
             }),
             @ApiResponse(description = "Objeto de resposta", responseCode = "400", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":[]}"))
+                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
             })
         }
     )

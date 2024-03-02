@@ -37,6 +37,8 @@ public class PersonServiceImpl implements PersonService  {
 
     @Override
     public PersonProjection findById(Long id) {
+        if (id == null)
+            throw new NegociationException("É necessário informar um Id válido");
         return repository.findByIdWithProjection(id);
     }
 
@@ -62,7 +64,7 @@ public class PersonServiceImpl implements PersonService  {
     @Transactional
     public PersonProjection update(Long id, RecordPerson model) {
         if (id == null)
-            throw new NegociationException("Não foi possível identificar a pessoa com o Id %d".formatted(id));
+            throw new NegociationException("É necessário informar um Id válido");
 
         var user = repository.findById(id)
             .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
@@ -94,8 +96,10 @@ public class PersonServiceImpl implements PersonService  {
     }
 
     @Override
-    public boolean delete(Long id) {
-        return false;
+    public void delete(Long id) {
+        if (id == null)
+            throw new NegociationException("É preciso informar um Id válido");
+        repository.deleteById(id);
     }
 
     private static String normalizeDocument(String document) {

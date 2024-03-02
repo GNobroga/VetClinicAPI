@@ -16,5 +16,5 @@ public interface GenericService<E extends BaseEntity, M, P> {
 
     P update(Long id, M model);
 
-    boolean delete(Long id);
+    void delete(Long id);
 }

@@ -14,7 +14,7 @@ public class DocumentConvert implements AttributeConverter<String, String> {
         if (document.length() == 11) {
             return document.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
         }
-        return document.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$2");
+        return document.replaceAll("(\\d{2})(\\d{3})(\\d{3})(\\d{4})(\\d{2})", "$1.$2.$3/$4-$5");
     }
-    
+
 }

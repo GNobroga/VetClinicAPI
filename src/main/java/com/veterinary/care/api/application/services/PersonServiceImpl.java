@@ -94,7 +94,7 @@ public class PersonServiceImpl implements PersonService  {
         mapper.toEntity(user,  model);
 
         user.getAddresses().forEach(x -> x.setPerson(user));
-        repository.save(user);
+        repository.saveAndFlush(user);
 
         return repository.getProjectionById(id);
     }

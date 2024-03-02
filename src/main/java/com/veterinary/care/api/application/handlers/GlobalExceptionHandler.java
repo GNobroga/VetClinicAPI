@@ -41,4 +41,14 @@ public class GlobalExceptionHandler {
         return responseHandler;
     }
 
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(code = HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseHandler<Object> defaultHandleException(Exception ex) {
+        var responseHandler = new ResponseHandler<>();
+        responseHandler.addMessage("Error interno");
+        responseHandler.setStatus(Status.ERROR);
+        responseHandler.setCode(HttpStatus.INTERNAL_SERVER_ERROR);
+        return responseHandler;
+    }
+
 }

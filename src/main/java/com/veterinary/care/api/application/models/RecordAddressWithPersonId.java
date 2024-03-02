@@ -30,6 +30,7 @@ public record RecordAddressWithPersonId(
 
         @JsonProperty("cep")
         @Pattern(regexp = "\\d{5}-?\\d{3}", message = "O cep não possui um valor válido.")
+        @NotBlank(message = "O cep é obrigatório")
         String zipCode,
 
         @CheckEnumType.EnumType(AddressType.class)

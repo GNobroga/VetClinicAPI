@@ -47,6 +47,10 @@ public class ResponseHandler<TResult> {
         this.messages.add(message);
     }
 
+    public void addMessage(List<String> messages) {
+        this.messages = messages;
+    }
+
     public void setStatus(Status status) {
         this.status = status.getStatus();
     }

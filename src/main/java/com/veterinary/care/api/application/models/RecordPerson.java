@@ -5,12 +5,18 @@ import java.util.List;
 import com.veterinary.care.api.application.enums.PersonType;
 import com.veterinary.care.api.application.validators.constraints.CheckEnumType;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+@Schema(
+        name = "Pessoa",
+        description = "Exemplo de JSON para cadastrar pessoa.",
+        example = "{\"name\": \"Gabriel\", \"type\": \"CLIENT\", \"birthDate\": \"2000-04-10\", \"document\": \"17364509720\", \"phone\": \"28999505410\", \"email\": \"gabrielcardoso123@gmail.com\", \"username\": \"gabiroba\", \"password\": \"gabiroba123\", \"addresses\": [{\"place\": \"Elizeu meia nove\", \"number\": \"100\", \"complement\": \"atrás do seu josé\", \"zipCode\": \"29360000\", \"type\": \"WORK\"}]}"
+)
 @CheckEnumType(className = RecordPerson.class)
 public record RecordPerson(
 

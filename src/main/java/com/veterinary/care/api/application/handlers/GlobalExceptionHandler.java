@@ -13,26 +13,30 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import com.veterinary.care.api.application.utils.ResponseHandler;
+import com.veterinary.care.api.application.utils.ResponseHandler.Status;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, List<String>>> handleValidationErrors(MethodArgumentNotValidException ex) {
+    @ResponseStatus(code = HttpStatus.BAD_GATEWAY)
+    public ResponseHandler<Object> handleValidationErrors(MethodArgumentNotValidException ex) {
         Function<ObjectError, String> getDefaultMessage = (obj) -> obj.getDefaultMessage(); 
 
         var errors = ex.getBindingResult().getAllErrors()
             .stream().map(getDefaultMessage).collect(Collectors.toList());
 
-        Map<String, List<String>> errorsMap = new HashMap<>()
-        {
-            {
-                put("errors", errors);
-            }
-        };
+        var responseHandler = new ResponseHandler<Object>();
 
-        return new ResponseEntity<>(errorsMap, HttpStatus.BAD_REQUEST);
+        responseHandler.setMessages(errors);
+        responseHandler.setStatus(Status.ERROR);
+        responseHandler.setCode(HttpStatus.BAD_REQUEST);
+
+        return responseHandler;
     }
 
 }

@@ -1,0 +1,1 @@
+alter table tb_attendances add column price decimal(10, 2) default 0;

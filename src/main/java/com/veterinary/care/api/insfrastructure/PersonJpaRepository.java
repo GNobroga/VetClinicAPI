@@ -14,11 +14,16 @@ import com.veterinary.care.api.domain.projection.PersonProjection;
 
 public interface PersonJpaRepository extends JpaRepository<PersonEntity, Long> {
 
-    @Query("from PersonEntity p join fetch p.user left join fetch p.addresses")
+    @Query("select distinct p from PersonEntity p join fetch p.user left join fetch p.addresses")
     Page<PersonProjection> findAllWithProjection(Pageable pageable);
 
     @Query("select distinct p from PersonEntity p join fetch p.user u left join fetch p.addresses a where p.id = :id")
-    PersonProjection findByIdWithProjection(@Param("id") Long id);
+    PersonProjection getProjectionById(@Param("id") Long id);
+
+    @Query("from PersonEntity p join fetch p.user u where u.username = :username")
+    Optional<PersonEntity> findByUsername(@Param("username") String username);
+
+    Optional<PersonEntity> findByEmail(String email);
 
     @Query("from PersonEntity p join fetch p.user u where p.email = :email or u.username = :username")
     List<PersonEntity> findByEmailOrUsername(@Param("email") String email, @Param("username") String username);

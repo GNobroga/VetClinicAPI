@@ -1,16 +1,18 @@
 package com.veterinary.care.api.application.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.veterinary.care.api.application.enums.AddressType;
 import com.veterinary.care.api.application.validators.constraints.CheckEnumType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Schema(
     name = "Endereço",
     description = "Exemplo de um payload para cadastrar Endereço",
-    example = "{ \"place\": \"São Joaquim\", \"number\": \"100\", \"complement\": \"Atrás da academia\", \"zipCode\": \"2936000\", \"type\": \"HOME\" }"
+    example = "{ \"place\": \"São Joaquim\", \"number\": \"100\", \"complement\": \"Atrás da academia\", \"cep\": \"29360-000\", \"type\": \"HOME\" }"
 )
 @CheckEnumType(className = RecordAddress.class)
 public record RecordAddress(
@@ -25,8 +27,8 @@ public record RecordAddress(
         @Size(max = 255, message = "O complemento pode ter no máximo 255 caracteres.")
         String complement,
 
-        @Size(max = 255, message = "O zipCode só pode ter no máximo 255 caracteres.")
-        @NotBlank(message = "O zipCode é obrigatório.")
+        @JsonProperty("cep")
+        @Pattern(regexp = "\\d{5}-?\\d{3}", message = "O cep não possui um valor válido.")
         String zipCode,
 
         @CheckEnumType.EnumType(AddressType.class)

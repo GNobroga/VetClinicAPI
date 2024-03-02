@@ -28,5 +28,9 @@ public interface PersonMapper {
             .build();
     }
 
-    void toEntity(PersonEntity target, @MappingTarget RecordPerson source);
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "client", ignore = true)
+    @Mapping(target = "veterinary", ignore = true)
+    @Mapping(target = "user", ignore = true)
+    void toEntity(@MappingTarget PersonEntity target,  RecordPerson source);
 }

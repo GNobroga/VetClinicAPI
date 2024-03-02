@@ -3,27 +3,35 @@ package com.veterinary.care.api.domain.projection;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({"id"})
 public interface AddressProjection {
 
     Long getId();
 
-    String getPublicPlace();
+    String getPlace();
 
     String getNumber();
 
     String getComplement();
 
-    String getAddressType();
+    String getType();
 
-    @JsonProperty("personId")
-    @Value("#{target.person.id}")
-    Long getPersonId();
+    @JsonProperty("cep")
+    String getZipCode();
 
-    // interface PersonProjection {
-    //     Long getId();
-    //     String getName();
-    //     String get
+    @Value("#{target.person.name}")
+    String getName();
 
-    // }
+    @Value("#{target.person.document}")
+    String getDocument();
+
+    @Value("#{target.person.phone}")
+    String getPhone();
+
+    @Value("#{target.person.email}")
+    String getEmail();
+
+
 }

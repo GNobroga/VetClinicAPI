@@ -1,5 +1,6 @@
 package com.veterinary.care.api.domain.entities;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.veterinary.care.api.domain.entities.base.BaseEntity;
@@ -41,6 +42,9 @@ public class AttendanceEntity extends BaseEntity {
 
     @Column(name = "dog_temperament", length = 255, nullable = true)
     private String dogTemperament;
+
+    @Column(name = "price", columnDefinition = "NUMERIC(10, 2)")
+    private BigDecimal price;
 
     @JoinColumn(name = "dog_id", nullable = false)
     @ManyToOne

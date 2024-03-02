@@ -38,8 +38,8 @@ public class PersonServiceImpl implements PersonService  {
     @Override
     public PersonProjection findById(Long id) {
         if (id == null)
-            throw new NegociationException("É necessário informar um Id válido");
-        return repository.findByIdWithProjection(id);
+            throw new NegociationException("É necessário informar uma identificação válida");
+        return repository.getProjectionById(id);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PersonServiceImpl implements PersonService  {
 
         var entity = mapper.toEntity(model);
         entity.getAddresses().forEach(x -> x.setPerson(entity));
-        return repository.findByIdWithProjection(repository.save(entity).getId());
+        return repository.getProjectionById(repository.save(entity).getId());
     }
 
     @Override
@@ -69,12 +69,16 @@ public class PersonServiceImpl implements PersonService  {
         var user = repository.findById(id)
             .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
 
-        if (!user.getDocument().equals(normalizeDocument(model.document())) &&   repository.findByDocument(model.document()).isPresent())
+        if (!normalizeDocument(user.getDocument()).equals(normalizeDocument(model.document())) &&  repository.findByDocument(model.document()).isPresent())
             throw new NegociationException("Documento não está disponível para uso");
 
-        if ((!user.getEmail().equals(model.email()) || !user.getUser().getUsername().equals(model.username()))
-            && !repository.findByEmailOrUsername(model.email(), model.username()).isEmpty())
-                throw new NegociationException("Email ou username não estão disponíveis para uso");
+
+        if (
+            (!user.getUser().getUsername().equalsIgnoreCase(model.username()) && repository.findByUsername(model.username()).isPresent()) ||
+            (!user.getEmail().equalsIgnoreCase(model.email()) && repository.findByEmail(model.email()).isPresent())
+        )
+            throw new NegociationException("Email ou username não estão disponíveis para uso");
+
 
         // Se o usuário mandar um endereço eu apago todos os existentes.
         if (!model.addresses().isEmpty()) {
@@ -92,7 +96,7 @@ public class PersonServiceImpl implements PersonService  {
         user.getAddresses().forEach(x -> x.setPerson(user));
         repository.save(user);
 
-        return repository.findByIdWithProjection(id);
+        return repository.getProjectionById(id);
     }
 
     @Override
@@ -103,7 +107,7 @@ public class PersonServiceImpl implements PersonService  {
     }
 
     private static String normalizeDocument(String document) {
-        return document.replaceAll("[^\\d]", document);
+        return document.replaceAll("[^\\d]", "");
     }
 
 

@@ -1,23 +1,34 @@
 package com.veterinary.care.api.application.models;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
+import java.math.BigDecimal;
+
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 public record RecordAttendance(
-        @NotBlank(message = "A data de atendimento não pode ser vazio.")
-        @Schema(description = "Data de atendimento no formato: YYYY-MM-DD")
+
+        @Pattern(regexp = "^(?:\\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])$", message = "A data precisa estar no formato YYYY-MM-DD")
         String attendanceDate,
 
         String diagnosis,
 
         String comments,
 
-        Float dogWeight,
+        @DecimalMax(value = "100000", inclusive = true, message = "O peso do cachorro não pode ser maior que 100000")
+        @DecimalMin(value = "0", inclusive = true,  message = "O peso do cachorro não pode ser menor que 0")
+        Double dogWeight,
 
-        Float dogHeight,
+        @DecimalMax(value = "100000", inclusive = true, message = "O altura do cachorro não pode ser maior que 100000")
+        @DecimalMin(value = "0", inclusive = true,  message = "O altura do cachorro não pode ser menor que 0")
+        Double dogHeight,
 
         String dogTemperament,
+
+        @DecimalMax(value = "100000", inclusive = true, message = "O preço não pode ser maior que 100000")
+        @DecimalMin(value = "0", inclusive = true,  message = "O preço não pode ser menor que 0")
+        BigDecimal price,
 
         @NotNull(message = "O dogId não pode ser nulo")
         Long dogId,

@@ -96,8 +96,6 @@
 | user_id            | bigint       | Not Null, FK (tb_users.id)                        |
 
 
-
-
 ## Tecnologias
 
 - Java 17

@@ -19,7 +19,7 @@ public @interface CheckEnumType {
  
     Class<?> className();
 
-    String message() default "Enum inválido";
+    String message() default "Tipo Inválido";
 
     Class<?>[] groups() default { };
 

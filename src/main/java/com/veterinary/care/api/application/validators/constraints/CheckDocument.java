@@ -15,9 +15,9 @@ import jakarta.validation.Payload;
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = CheckCpfValidator.class)
 @Documented
-public @interface CheckCpf {
+public @interface CheckDocument {
 
-    String message() default "CPF Inválido";
+    String message() default "Documento Inválido";
 
     Class<?>[] groups() default { };
 

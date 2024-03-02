@@ -3,11 +3,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.veterinary.care.api.domain.converters.DocumentConvert;
 import com.veterinary.care.api.domain.entities.base.BaseEntity;
 import com.veterinary.care.api.application.enums.PersonType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -38,6 +40,7 @@ public class PersonEntity extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private PersonType type;
 
+    @Convert(converter = DocumentConvert.class)
     @Column(name = "cpf_cnpj", length = 14, nullable = false)
     private String document;
 

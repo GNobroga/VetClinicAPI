@@ -3,6 +3,7 @@ package com.veterinary.care.api.application.models;
 import java.util.List;
 
 import com.veterinary.care.api.application.enums.PersonType;
+import com.veterinary.care.api.application.validators.constraints.CheckDocument;
 import com.veterinary.care.api.application.validators.constraints.CheckEnumType;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -28,6 +29,7 @@ public record RecordPerson(
         @NotBlank(message = "O tipo de pessoa não pode ser nulo")
         String type,
 
+        @CheckDocument
         @NotBlank(message = "O documento é obrigatório.")
         String document,
 

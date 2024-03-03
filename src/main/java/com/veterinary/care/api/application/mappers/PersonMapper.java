@@ -14,6 +14,7 @@ public interface PersonMapper {
 
     PersonMapper INSTANCE = Mappers.getMapper( PersonMapper.class );
 
+    @Mapping(target = "type", ignore = true)
     @Mapping(target = "client", ignore = true)
     @Mapping(target = "veterinary", ignore = true)
     @Mapping(target = "user", expression = "java(mapUsernameAndPasswordToUser(source.username(), source.password()))")
@@ -28,6 +29,7 @@ public interface PersonMapper {
             .build();
     }
 
+    @Mapping(target = "type", ignore = true)
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "client", ignore = true)
     @Mapping(target = "veterinary", ignore = true)

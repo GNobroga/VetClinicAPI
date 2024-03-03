@@ -39,7 +39,7 @@ import jakarta.validation.Valid;
 public class GenericController<E extends BaseEntity, M, P, S extends GenericService<E, M, P>> {
 
     @Autowired
-    private S service;
+    protected S service;
 
     @GetMapping
     @Operation(
@@ -75,7 +75,7 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
 
     @GetMapping("/{id}")
     @Operation(
-        summary = "Retorna lista de objetos dessa entidade",
+        summary = "Retorna um objeto dessa entidade",
         description = "Descrição",
         responses = {
             @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {

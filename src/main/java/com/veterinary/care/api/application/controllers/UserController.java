@@ -11,7 +11,7 @@ import com.veterinary.care.api.domain.projection.UserProjection;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Usuários", description = "CRUD para usuários")
-@RequestMapping("/api/v1/usuarios")
+@RequestMapping("/api/v1/pessoa/usuarios")
 @RestController
 public class UserController extends GenericController<UserEntity, RecordUser, UserProjection, UserService> {
 

@@ -1,5 +1,6 @@
 package com.veterinary.care.api.application.services;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import jakarta.transaction.Transactional;
 
 @Service
 public class ClientServiceImpl implements ClientService {
+
 
     @Autowired
     private ClientJpaRepository repository;
@@ -50,7 +52,7 @@ public class ClientServiceImpl implements ClientService {
 
         // Verificando se a pessoa já é um cliente
         if (repository.findByPersonId(model.personId()).isPresent())
-            throw new NegociationException("O cliente já está cadastrado");
+            throw new NegociationException("O cliente já está associado a esse papel");
 
         // Se a pessoa for veterinário ela não pode ser um cliente, porque se não alteraria o seu papel
         if (person.getType() != null && person.getType().equals(PersonType.VETERINARY))
@@ -59,31 +61,40 @@ public class ClientServiceImpl implements ClientService {
         // Adicionar o type CLIENT na pessoa
         person.setType(PersonType.CLIENT);
 
+
         ClientEntity client = ClientEntity.builder()
             .person(person)
+            .registrationDate(LocalDate.now())
             .build();
-
-        repository.saveAndFlush(client);
 
        return repository.getProjectionById(repository.saveAndFlush(client).getId()).get();
     }
 
+    @Transactional
     @SuppressWarnings("null")
     @Override
     public ClientProjection update(Long id, RecordClient model) {
-        // Vai apenas remover o papel de cliente do usuário
-        if (id == null)
-            throw new NegociationException("Identificação inválida");
+         // Vai apenas remover o papel de cliente do usuário
 
-        repository.findById(id)
-            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+         var personId = model.personId();
 
-        var person = personJpaRepository.findById(model.personId())
+         if (personId == null)
+         throw new NegociationException("Identificação inválida");
+
+        var person = personJpaRepository.findById(personId)
             .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
 
+        var client = person.getClient();
+
+        if (client == null)
+            throw new NegociationException("Essa pessoa não é do tipo CLIENT");
+
+        System.out.println("OIII");
+
         person.setType(null);
+        person.setClient(null);
+        repository.deleteById(client.getId());
         personJpaRepository.saveAndFlush(person);
-        repository.deleteById(id);
         return null;
     }
 
@@ -93,14 +104,17 @@ public class ClientServiceImpl implements ClientService {
         if (id == null)
             throw new NegociationException("Identificação inválida");
 
-        var client = repository.findById(id)
-            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
-
-        var person = personJpaRepository.findById(client.getPerson().getId())
+        var person = personJpaRepository.findById(id)
             .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
 
-        repository.deleteById(id);
+        var client = person.getClient();
+
+        if (client == null)
+            throw new NegociationException("Essa pessoa não é um cliente");
+
+        repository.deleteById(client.getId());
         personJpaRepository.delete(person);
     }
+
 
 }

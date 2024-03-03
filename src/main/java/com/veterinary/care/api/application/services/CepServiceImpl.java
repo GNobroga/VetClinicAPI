@@ -10,7 +10,7 @@ import com.veterinary.care.api.application.interfaces.CepService;
 public class CepServiceImpl implements CepService {
 
 
-    @Value("${viacep-api}")
+    @Value("${viacep-api.baseUrl}")
     private String apiUrl;
 
     @SuppressWarnings("null")

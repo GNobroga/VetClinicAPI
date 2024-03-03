@@ -36,7 +36,7 @@ public class PersonEntity extends BaseEntity {
     @Column(name = "name",  length = 255, nullable = false)
     private String name;
 
-    @Column(name = "person_type",  length = 8, nullable = false)
+    @Column(name = "person_type",  length = 8, nullable = true)
     @Enumerated(EnumType.STRING)
     private PersonType type;
 

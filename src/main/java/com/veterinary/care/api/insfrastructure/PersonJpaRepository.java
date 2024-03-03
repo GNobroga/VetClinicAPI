@@ -18,7 +18,7 @@ public interface PersonJpaRepository extends JpaRepository<PersonEntity, Long> {
     Page<PersonProjection> findAllWithProjection(Pageable pageable);
 
     @Query("select distinct p from PersonEntity p join fetch p.user u left join fetch p.addresses a where p.id = :id")
-    PersonProjection getProjectionById(@Param("id") Long id);
+    Optional<PersonProjection> getProjectionById(@Param("id") Long id);
 
     @Query("from PersonEntity p join fetch p.user u where u.username = :username")
     Optional<PersonEntity> findByUsername(@Param("username") String username);

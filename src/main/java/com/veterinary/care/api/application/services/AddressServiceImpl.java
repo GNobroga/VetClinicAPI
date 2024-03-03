@@ -29,7 +29,6 @@ public class AddressServiceImpl implements AddressService {
 
     private AddressMapper mapper = AddressMapper.INSTANCE;
 
-
     @Override
     public List<AddressProjection> findAll(PageRequest pageRequest) {
        return repository.findAllWithProjection(pageRequest).getContent();

@@ -34,12 +34,12 @@ public class PersonServiceImpl implements PersonService  {
     public List<PersonProjection> findAll(PageRequest pageRequest) {
         return repository.findAllWithProjection(pageRequest).getContent();
     }
-
     @Override
     public PersonProjection findById(Long id) {
         if (id == null)
             throw new NegociationException("É necessário informar uma identificação válida");
-        return repository.getProjectionById(id);
+        return repository.getProjectionById(id)
+            .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
     }
 
     @Override
@@ -57,7 +57,7 @@ public class PersonServiceImpl implements PersonService  {
 
         var entity = mapper.toEntity(model);
         entity.getAddresses().forEach(x -> x.setPerson(entity));
-        return repository.getProjectionById(repository.save(entity).getId());
+        return repository.getProjectionById(repository.save(entity).getId()).get();
     }
 
     @Override
@@ -72,13 +72,11 @@ public class PersonServiceImpl implements PersonService  {
         if (!normalizeDocument(user.getDocument()).equals(normalizeDocument(model.document())) &&  repository.findByDocument(model.document()).isPresent())
             throw new NegociationException("Documento não está disponível para uso");
 
-
         if (
             (!user.getUser().getUsername().equalsIgnoreCase(model.username()) && repository.findByUsername(model.username()).isPresent()) ||
             (!user.getEmail().equalsIgnoreCase(model.email()) && repository.findByEmail(model.email()).isPresent())
         )
             throw new NegociationException("Email ou username não estão disponíveis para uso");
-
 
         // Se o usuário mandar um endereço eu apago todos os existentes.
         if (!model.addresses().isEmpty()) {
@@ -96,7 +94,7 @@ public class PersonServiceImpl implements PersonService  {
         user.getAddresses().forEach(x -> x.setPerson(user));
         repository.saveAndFlush(user);
 
-        return repository.getProjectionById(id);
+        return repository.getProjectionById(id).get();
     }
 
     @Override

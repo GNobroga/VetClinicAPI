@@ -1,0 +1,1 @@
+alter table tb_people alter column person_type drop not null;

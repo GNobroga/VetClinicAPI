@@ -1,8 +1,15 @@
 spring:
+    cache:
+        type: redis
+
+    data:
+        redis:
+            host: cache
+            port: 6379
 
     devtools:
         restart:
-            enabled: false
+            enabled: true
 
     datasource:
         url: jdbc:postgresql://db:5432/backend
@@ -20,4 +27,5 @@ springdoc:
     api-docs:
         path: /api-docs
 
-viacep-api: https://viacep.com.br/ws
+viacep-api:
+    baseUrl: https://viacep.com.br/ws

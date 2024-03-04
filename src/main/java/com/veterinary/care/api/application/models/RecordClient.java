@@ -5,7 +5,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-@Schema(name = "Cliente", type = "Object", example = "{ \"personId\": 1 }")
+@Schema(
+    name = "Cliente",
+    description = "Payload para Cliente",
+    example = "{ \"communicationPreferences\": \"email\", \"alternatePhone\": \"28999505410\", \"personId\": 1 }"
+)
 public record RecordClient(
 
     @Size(max = 100, message = "A comunicação preferida pode ter no máximo 45 caracteres")

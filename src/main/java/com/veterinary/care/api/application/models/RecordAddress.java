@@ -12,24 +12,24 @@ import jakarta.validation.constraints.Size;
 
 @Schema(
     name = "Endereço",
-    description = "Exemplo de um payload para cadastrar Endereço",
+    description = "Payload para Endereço",
     example = "{ \"place\": \"São Joaquim\", \"number\": \"100\", \"complement\": \"Atrás da academia\", \"cep\": \"29360-000\", \"type\": \"HOME\" }"
 )
 @CheckEnumType(className = RecordAddress.class)
 public record RecordAddress(
-        @Size(max = 255, message = "O place só pode ter no máximo 255 caracteres.")
-        @NotBlank(message = "O place é obrigatório.")
+        @Size(max = 255, message = "O place só pode ter no máximo 255 caracteres")
+        @NotBlank(message = "O place é obrigatório")
         String place,
 
-        @Size(max = 15, message = "O number só pode ter no máximo 15 caracteres.")
-        @NotBlank(message = "O number é obrigatório.")
+        @Size(max = 15, message = "O number só pode ter no máximo 15 caracteres")
+        @NotBlank(message = "O number é obrigatório")
         String number,
 
-        @Size(max = 255, message = "O complemento pode ter no máximo 255 caracteres.")
+        @Size(max = 255, message = "O complemento pode ter no máximo 255 caracteres")
         String complement,
 
         @JsonProperty("cep")
-        @Pattern(regexp = "\\d{5}-?\\d{3}", message = "O cep não possui um valor válido.")
+        @Pattern(regexp = "\\d{5}-?\\d{3}", message = "O cep não possui um valor válido")
         @NotBlank(message = "O cep é obrigatório")
         String zipCode,
 

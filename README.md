@@ -1,6 +1,12 @@
-## VetClinicAPI (Em construção)
+## VetClinicAPI (Projeto em desenvolvimento)
 
-A "VetClinicAPI" é uma API desenvolvida para atender às necessidades de uma clínica veterinária. Ela fornece um conjunto de endpoints que permite a gestão de informações relacionadas a clientes, animais de estimação, consultas veterinárias e profissionais de veterinária. A API é projetada para facilitar o gerenciamento eficiente de dados, agendamento de consultas, e fornecer informações importantes para a equipe da clínica veterinária.
+É uma API para gerenciar uma clínica veterinária, permitindo fazer operações de CRUD com validações, autenticação e diversos outros mecanismos.
+
+### Diagrama Lógico
+
+Foram adicionado algumas colunas a mais, porém a estrutura abaixo permenace a mesma.
+
+![307626396-9d87f508-7f8c-4e47-a796-00e1a6e1bf90](https://github.com/GNobroga/VetClinicAPI/assets/88632109/42a84f9b-5be2-4646-b88b-aafa28185516)
 
 ### Endpoints
 

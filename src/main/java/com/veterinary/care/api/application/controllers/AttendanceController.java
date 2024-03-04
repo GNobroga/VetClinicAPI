@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Atendimentos", description = "CRUD para atendimentos")
 @RequestMapping("/api/v1/atendimentos")
 @RestController
-public class AttendanceController extends GenericController<AttendanceEntity, RecordAttendance, AttendanceProjection, AttendanceService> {
+public class AttendanceController
+        extends GenericController<AttendanceEntity, RecordAttendance, AttendanceProjection, AttendanceService> {
 
 }

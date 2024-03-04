@@ -31,7 +31,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressProjection> findAll(PageRequest pageRequest) {
-       return repository.findAllWithProjection(pageRequest).getContent();
+        return repository.findAllWithProjection(pageRequest).getContent();
     }
 
     @Override
@@ -47,7 +47,6 @@ public class AddressServiceImpl implements AddressService {
         return repository.getProjectionById(id);
     }
 
-
     @SuppressWarnings("null")
     @Override
     public AddressProjection create(RecordAddressWithPerson model) {
@@ -56,7 +55,7 @@ public class AddressServiceImpl implements AddressService {
         }
 
         var person = personJpaRepository.findById(model.personId())
-            .orElseThrow(() -> new NegociationException("Não há pessoa com a identificação informada"));
+                .orElseThrow(() -> new NegociationException("Não há pessoa com a identificação informada"));
 
         var entity = mapper.toEntity(model);
         entity.setPerson(person);
@@ -69,7 +68,7 @@ public class AddressServiceImpl implements AddressService {
             throw new NegociationException("O id é obrigatório");
 
         var entity = repository.findById(id)
-            .orElseThrow(() -> new NegociationException("O endereço não está cadastrado"));
+                .orElseThrow(() -> new NegociationException("O endereço não está cadastrado"));
 
         if (entity.getId() != model.personId())
             throw new NegociationException("Esse endereço não pertence a pessoa especificada");
@@ -77,10 +76,8 @@ public class AddressServiceImpl implements AddressService {
         if (!cepService.validate(cepService.normalizeCep(model.zipCode())))
             throw new NegociationException("O cep não foi encontrado");
 
-
         if (entity.getPerson().getId() != model.personId())
             throw new NegociationException("Não é possível alterar a identificação da pessoa");
-
 
         mapper.toEntity(entity, model);
 
@@ -96,6 +93,5 @@ public class AddressServiceImpl implements AddressService {
             throw new NegociationException("O id não pode ser nulo");
         repository.deleteById(id);
     }
-
 
 }

@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Endereços", description = "CRUD para endereços")
 @RequestMapping("/api/v1/enderecos")
 @RestController
-public class AddressController extends GenericController<AddressEntity, RecordAddressWithPerson, AddressProjection, AddressService> {
+public class AddressController
+        extends GenericController<AddressEntity, RecordAddressWithPerson, AddressProjection, AddressService> {
 
 }

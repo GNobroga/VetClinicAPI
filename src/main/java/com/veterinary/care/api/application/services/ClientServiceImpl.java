@@ -22,7 +22,6 @@ import jakarta.transaction.Transactional;
 @Service
 public class ClientServiceImpl implements ClientService {
 
-
     @Autowired
     private ClientJpaRepository repository;
 
@@ -33,16 +32,16 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public List<ClientProjection> findAll(PageRequest pageRequest) {
-       return repository.getAllProjections(pageRequest).getContent();
+        return repository.getAllProjections(pageRequest).getContent();
     }
 
     @Override
     public ClientProjection findById(Long id) {
-       if (id == null)
+        if (id == null)
             throw new NegociationException("Identificação inválida");
 
         return repository.getProjectionById(id)
-            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+                .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
     }
 
     @Transactional
@@ -51,7 +50,7 @@ public class ClientServiceImpl implements ClientService {
     public ClientProjection create(RecordClient model) {
 
         var person = personJpaRepository.findById(model.personId())
-            .orElseThrow(() -> new NegociationException("Pessoa não existe"));
+                .orElseThrow(() -> new NegociationException("Pessoa não existe"));
 
         var personType = person.getType();
 
@@ -67,9 +66,8 @@ public class ClientServiceImpl implements ClientService {
         var client = mapper.toEntity(model);
         person.setClient(client);
         client.setPerson(person);
-       return repository.getProjectionById(repository.saveAndFlush(client).getId()).get();
+        return repository.getProjectionById(repository.saveAndFlush(client).getId()).get();
     }
-
 
     @Transactional
     @SuppressWarnings("null")
@@ -78,13 +76,13 @@ public class ClientServiceImpl implements ClientService {
         var personId = model.personId();
 
         var entity = repository.findById(id)
-            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+                .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
 
         if (entity.getId() != personId)
             throw new NegociationException("A pessoa associada a esse cliente é diferente da que foi especificada");
 
         personJpaRepository.findById(personId)
-            .orElseThrow(() -> new NegociationException("A pessoa não foi encontrada"));
+                .orElseThrow(() -> new NegociationException("A pessoa não foi encontrada"));
 
         mapper.toEntity(entity, model);
 
@@ -99,10 +97,9 @@ public class ClientServiceImpl implements ClientService {
         if (id == null)
             throw new NegociationException("Cliente não identificado");
         var client = repository.findById(id)
-            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+                .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
         repository.deleteById(id);
         personJpaRepository.deleteById(client.getPerson().getId());
     }
-
 
 }

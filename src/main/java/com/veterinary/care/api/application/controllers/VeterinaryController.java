@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Veterinarios", description = "CRUD para veterinarios")
 @RequestMapping("/api/v1/veterinarios")
 @RestController
-public class VeterinaryController extends GenericController<VeterinaryEntity, RecordVeterinary, VeterinaryProjection, VeterinaryService> {
+public class VeterinaryController
+        extends GenericController<VeterinaryEntity, RecordVeterinary, VeterinaryProjection, VeterinaryService> {
 
 }

@@ -14,5 +14,5 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/v1/pessoas")
 @RestController
 public class PersonController extends GenericController<PersonEntity, RecordPerson, PersonProjection, PersonService> {
-    
+
 }

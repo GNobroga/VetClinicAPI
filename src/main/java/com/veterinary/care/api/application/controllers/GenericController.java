@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,7 +29,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 /**
- *  Uma classe base com o padrão de métodos para controllers
+ * Uma classe base com o padrão de métodos para controllers
+ *
  * @param <E> Uma entidade que extende de BaseEntity
  * @param <M> Um objeto de input
  * @param <S> Um service que extende de GenericService
@@ -42,28 +42,18 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
     protected S service;
 
     @GetMapping
-    @Operation(
-        summary = "Retorna lista de objetos dessa entidade",
-        description = "Descrição",
-        responses = {
+    @Operation(summary = "Retorna lista de objetos dessa entidade", description = "Descrição", responses = {
             @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
             }),
             @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
             })
-        }
-    )
+    })
     public ResponseHandler<List<P>> onGetMethod(
-            @Parameter(name = "pageNumber", description = "página desejada", schema = @Schema(type = "integer", defaultValue = "0"))
-            @RequestParam(defaultValue = "0")
-                int pageNumber,
-            @Parameter(name = "pageSize", description = "quantidade de itens (limite é 50)", schema = @Schema(type = "integer", defaultValue = "10"))
-            @RequestParam(defaultValue = "10")
-                int pageSize,
-            @Parameter(name = "order", description = "ordenação ASC ou DESC", schema = @Schema(type = "string", defaultValue = "ASC"))
-            @RequestParam(defaultValue = "ASC")
-                String order) {
+            @Parameter(name = "pageNumber", description = "página desejada", schema = @Schema(type = "integer", defaultValue = "0")) @RequestParam(defaultValue = "0") int pageNumber,
+            @Parameter(name = "pageSize", description = "quantidade de itens (limite é 50)", schema = @Schema(type = "integer", defaultValue = "10")) @RequestParam(defaultValue = "10") int pageSize,
+            @Parameter(name = "order", description = "ordenação ASC ou DESC", schema = @Schema(type = "string", defaultValue = "ASC")) @RequestParam(defaultValue = "ASC") String order) {
 
         pageNumber = pageNumber < 0 ? 0 : pageNumber;
         pageSize = pageSize > 50 ? 50 : pageSize;
@@ -76,86 +66,63 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
     }
 
     @GetMapping("/{id}")
-    @Operation(
-        summary = "Retorna um objeto dessa entidade",
-        description = "Descrição",
-        responses = {
+    @Operation(summary = "Retorna um objeto dessa entidade", description = "Descrição", responses = {
             @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
             }),
             @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
             })
-        }
-    )
+    })
     public ResponseHandler<P> onGetMethod(@PathVariable Long id) {
         return new ResponseHandler<P>(service.findById(id));
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    @Operation(
-        summary = "Permite criar um objeto dessa entidade",
-        description = "Descrição",
-        responses = {
+    @Operation(summary = "Permite criar um objeto dessa entidade", description = "Descrição", responses = {
             @ApiResponse(description = "Objeto de resposta", responseCode = "201", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"201\",\"messages\":[],\"result\":[]}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"201\",\"messages\":[],\"result\":[]}"))
             }),
             @ApiResponse(description = "Objeto de resposta", responseCode = "400", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
             })
-        }
-    )
+    })
     public ResponseHandler<P> onPostMethod(
-        @RequestBody @Valid M model
-    ) {
+            @RequestBody @Valid M model) {
         return new ResponseHandler<>(Status.OK, HttpStatus.CREATED, service.create(model));
     }
 
-
     @PutMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    @Operation(
-        summary = "Permite atualizar um objeto dessa entidade",
-        description = "Descrição",
-        responses = {
+    @Operation(summary = "Permite atualizar um objeto dessa entidade", description = "Descrição", responses = {
             @ApiResponse(description = "Retorna a entidade atualizada", responseCode = "200", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
             }),
             @ApiResponse(description = "Objeto de resposta", responseCode = "400", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
             })
-        }
-    )
+    })
     public ResponseHandler<P> onPutMethod(
-        @Parameter(name = "id", description =  "id da entidade a ser atualizada")
-        @PathVariable Long id,
-        @RequestBody @Valid M model
-    ) {
+            @Parameter(name = "id", description = "id da entidade a ser atualizada") @PathVariable Long id,
+            @RequestBody @Valid M model) {
         return new ResponseHandler<>(Status.OK, HttpStatus.OK, service.update(id, model));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.NO_CONTENT)
-    @Operation(
-        summary = "Permite atualizar um objeto dessa entidade",
-        description = "Descrição",
-        responses = {
+    @Operation(summary = "Permite atualizar um objeto dessa entidade", description = "Descrição", responses = {
             @ApiResponse(description = "Retorna a entidade atualizada", responseCode = "204", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"ok\",\"code\":\"200\",\"messages\":[],\"result\":[]}"))
             }),
             @ApiResponse(description = "Objeto de resposta", responseCode = "400", content = {
-                @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
+                    @Content(mediaType = "application/json", schema = @Schema(type = "JSON", example = "{\"status\":\"error\",\"code\":\"400\",\"messages\":[],\"result\":null}"))
             })
-        }
-    )
+    })
     public ResponseHandler<?> onDeleteMethod(
-        @Parameter(name = "id", description =  "id da entidade a ser deletada")
-        @PathVariable Long id
-    ) {
+            @Parameter(name = "id", description = "id da entidade a ser deletada") @PathVariable Long id) {
         service.delete(id);
         return new ResponseHandler<>(Status.NO_CONTENT, HttpStatus.NO_CONTENT, null);
     }
-
 
 }

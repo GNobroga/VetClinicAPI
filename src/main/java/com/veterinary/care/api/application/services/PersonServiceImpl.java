@@ -1,4 +1,5 @@
 package com.veterinary.care.api.application.services;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 
 @Service
-public class PersonServiceImpl implements PersonService  {
+public class PersonServiceImpl implements PersonService {
 
     @Autowired
     private EntityManager entityManager;
@@ -34,12 +35,13 @@ public class PersonServiceImpl implements PersonService  {
     public List<PersonProjection> findAll(PageRequest pageRequest) {
         return repository.findAllWithProjection(pageRequest).getContent();
     }
+
     @Override
     public PersonProjection findById(Long id) {
         if (id == null)
             throw new NegociationException("É necessário informar uma identificação válida");
         return repository.getProjectionById(id)
-            .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+                .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
     }
 
     @Override
@@ -67,15 +69,15 @@ public class PersonServiceImpl implements PersonService  {
             throw new NegociationException("É necessário informar um Id válido");
 
         var user = repository.findById(id)
-            .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+                .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
 
-        if (!normalizeDocument(user.getDocument()).equals(normalizeDocument(model.document())) &&  repository.findByDocument(model.document()).isPresent())
+        if (!normalizeDocument(user.getDocument()).equals(normalizeDocument(model.document()))
+                && repository.findByDocument(model.document()).isPresent())
             throw new NegociationException("Documento não está disponível para uso");
 
-        if (
-            (!user.getUser().getUsername().equalsIgnoreCase(model.username()) && repository.findByUsername(model.username()).isPresent()) ||
-            (!user.getEmail().equalsIgnoreCase(model.email()) && repository.findByEmail(model.email()).isPresent())
-        )
+        if ((!user.getUser().getUsername().equalsIgnoreCase(model.username())
+                && repository.findByUsername(model.username()).isPresent()) ||
+                (!user.getEmail().equalsIgnoreCase(model.email()) && repository.findByEmail(model.email()).isPresent()))
             throw new NegociationException("Email ou username não estão disponíveis para uso");
 
         // Se o usuário mandar um endereço eu apago todos os existentes.
@@ -87,8 +89,9 @@ public class PersonServiceImpl implements PersonService  {
             entityManager.createQuery(delete).executeUpdate();
         }
 
-        // Se passou nas validações acima eu transfiro as informações do model para entity
-        mapper.toEntity(user,  model);
+        // Se passou nas validações acima eu transfiro as informações do model para
+        // entity
+        mapper.toEntity(user, model);
 
         user.getAddresses().forEach(x -> x.setPerson(user));
         repository.saveAndFlush(user);
@@ -106,7 +109,5 @@ public class PersonServiceImpl implements PersonService  {
     private static String normalizeDocument(String document) {
         return document.replaceAll("[^\\d]", "");
     }
-
-
 
 }

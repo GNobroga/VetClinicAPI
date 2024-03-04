@@ -9,7 +9,6 @@ import com.veterinary.care.api.application.interfaces.CepService;
 @Service
 public class CepServiceImpl implements CepService {
 
-
     @Value("${viacep-api.baseUrl}")
     private String apiUrl;
 
@@ -29,6 +28,5 @@ public class CepServiceImpl implements CepService {
     public String normalizeCep(String cep) {
         return cep.replaceAll("[^\\d]", "");
     }
-
 
 }

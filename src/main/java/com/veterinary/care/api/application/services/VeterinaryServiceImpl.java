@@ -36,7 +36,7 @@ public class VeterinaryServiceImpl implements VeterinaryService {
     @Override
     public VeterinaryProjection findById(Long id) {
         return repository.getProjectionById(id)
-            .orElseThrow(() -> new NegociationException("Veterinário não encontrado"));
+                .orElseThrow(() -> new NegociationException("Veterinário não encontrado"));
     }
 
     @SuppressWarnings("null")
@@ -47,7 +47,7 @@ public class VeterinaryServiceImpl implements VeterinaryService {
         var personId = model.personId();
 
         var person = personJpaRepository
-            .findById(personId).orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+                .findById(personId).orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
 
         var personType = person.getType();
 
@@ -55,7 +55,7 @@ public class VeterinaryServiceImpl implements VeterinaryService {
             throw new NegociationException("Essa pessoa já possui um tipo associado");
 
         repository.findByCrmv(model.crmv())
-            .orElseThrow(() -> new NegociationException("Já existe um veterinário com o crmv informado"));
+                .orElseThrow(() -> new NegociationException("Já existe um veterinário com o crmv informado"));
 
         person.setType(PersonType.VETERINARY);
 
@@ -77,10 +77,11 @@ public class VeterinaryServiceImpl implements VeterinaryService {
             throw new NegociationException("A identificação é obrigatória");
 
         var entity = repository.findById(id)
-            .orElseThrow(() -> new NegociationException("Veterinário não encontrado"));
+                .orElseThrow(() -> new NegociationException("Veterinário não encontrado"));
 
         if (entity.getId() != model.personId())
-            throw new NegociationException("A identificação do veterinário é diferente da que foi passada na requisição");
+            throw new NegociationException(
+                    "A identificação do veterinário é diferente da que foi passada na requisição");
 
         if (entity.getCrmv() != model.crmv() && repository.findByCrmv(model.crmv()).isPresent())
             throw new NegociationException("Já existe um veterinário com o crmv informado");
@@ -88,7 +89,7 @@ public class VeterinaryServiceImpl implements VeterinaryService {
         var personId = model.personId();
 
         var person = personJpaRepository
-            .findById(personId).orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+                .findById(personId).orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
 
         var personType = person.getType();
 

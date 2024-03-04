@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.veterinary.care.api.application.enums.PersonType;
 import com.veterinary.care.api.application.exceptions.NegociationException;
 import com.veterinary.care.api.application.interfaces.ClientService;
+import com.veterinary.care.api.application.mappers.ClientMapper;
 import com.veterinary.care.api.application.models.RecordClient;
 import com.veterinary.care.api.domain.entities.ClientEntity;
 import com.veterinary.care.api.domain.projection.ClientProjection;
@@ -27,6 +28,8 @@ public class ClientServiceImpl implements ClientService {
 
     @Autowired
     private PersonJpaRepository personJpaRepository;
+
+    private ClientMapper mapper = ClientMapper.INSTANCE;
 
     @Override
     public List<ClientProjection> findAll(PageRequest pageRequest) {
@@ -50,73 +53,55 @@ public class ClientServiceImpl implements ClientService {
         var person = personJpaRepository.findById(model.personId())
             .orElseThrow(() -> new NegociationException("Pessoa não existe"));
 
-        // Verificando se a pessoa já é um cliente
-        if (repository.findByPersonId(model.personId()).isPresent())
-            throw new NegociationException("O cliente já está associado a esse papel");
+        var personType = person.getType();
 
-        // Se a pessoa for veterinário ela não pode ser um cliente, porque se não alteraria o seu papel
-        if (person.getType() != null && person.getType().equals(PersonType.VETERINARY))
-            throw new NegociationException("Um veterinário não pode ser cliente, pois já tem um papel.");
-
-        if (person.getType() != null && person.getType().equals(PersonType.CLIENT))
-            throw new NegociationException("Essa pessoa já é um cliente");
+        if (personType != null) {
+            if (personType.equals(PersonType.VETERINARY))
+                throw new NegociationException("Um veterinário não pode ser cliente");
+            else
+                throw new NegociationException("Essa pessoa já é um cliente");
+        }
 
         // Adicionar o type CLIENT na pessoa
         person.setType(PersonType.CLIENT);
-
-        ClientEntity client = ClientEntity.builder()
-            .person(person)
-            .registrationDate(LocalDate.now())
-            .build();
-
+        var client = mapper.toEntity(model);
+        person.setClient(client);
+        client.setPerson(person);
        return repository.getProjectionById(repository.saveAndFlush(client).getId()).get();
     }
 
-    /**
-     * @param id Não será usado aqui, só está de enfeite
-     */
+
     @Transactional
     @SuppressWarnings("null")
     @Override
     public ClientProjection update(Long id, RecordClient model) {
-         // Vai apenas remover o papel de cliente do usuário
+        var personId = model.personId();
 
-         var personId = model.personId();
+        var entity = repository.findById(id)
+            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
 
-         if (personId == null)
-         throw new NegociationException("Identificação inválida");
+        if (entity.getId() != personId)
+            throw new NegociationException("A pessoa associada a esse cliente é diferente da que foi especificada");
 
-        var person = personJpaRepository.findById(personId)
-            .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+        personJpaRepository.findById(personId)
+            .orElseThrow(() -> new NegociationException("A pessoa não foi encontrada"));
 
-        var client = person.getClient();
+        mapper.toEntity(entity, model);
 
-        if (client == null)
-            throw new NegociationException("Essa pessoa não é do tipo CLIENT");
+        repository.saveAndFlush(entity);
 
-        person.setType(null);
-        person.setClient(null);
-        repository.deleteById(client.getId());
-        personJpaRepository.saveAndFlush(person);
-        return null;
+        return repository.getProjectionById(id).get();
     }
 
     @SuppressWarnings("null")
     @Override
     public void delete(Long id) {
         if (id == null)
-            throw new NegociationException("Identificação inválida");
-
-        var person = personJpaRepository.findById(id)
-            .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
-
-        var client = person.getClient();
-
-        if (client == null)
-            throw new NegociationException("Essa pessoa não é um cliente");
-
-        repository.deleteById(client.getId());
-        personJpaRepository.delete(person);
+            throw new NegociationException("Cliente não identificado");
+        var client = repository.findById(id)
+            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+        repository.deleteById(id);
+        personJpaRepository.deleteById(client.getPerson().getId());
     }
 
 

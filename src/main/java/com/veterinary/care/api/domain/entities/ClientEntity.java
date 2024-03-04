@@ -32,6 +32,12 @@ public class ClientEntity extends BaseEntity {
     @Column(name = "registration_date", nullable = true, columnDefinition = "DATE")
     private LocalDate registrationDate;
 
+    @Column(name = "communication_preferences", length = 100, nullable = true)
+    private String communicationPreferences;
+
+    @Column(name = "alternate_phone", length = 45, nullable = true)
+    private String alternatePhone;
+
     @JoinColumn(name = "person_id", nullable = false)
     @OneToOne
     private PersonEntity person;

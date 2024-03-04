@@ -79,6 +79,9 @@ public class VeterinaryServiceImpl implements VeterinaryService {
         var entity = repository.findById(id)
             .orElseThrow(() -> new NegociationException("Veterinário não encontrado"));
 
+        if (entity.getId() != model.personId())
+            throw new NegociationException("A identificação do veterinário é diferente da que foi passada na requisição");
+
         if (entity.getCrmv() != model.crmv() && repository.findByCrmv(model.crmv()).isPresent())
             throw new NegociationException("Já existe um veterinário com o crmv informado");
 

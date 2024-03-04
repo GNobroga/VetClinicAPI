@@ -85,7 +85,6 @@ public class PersonServiceImpl implements PersonService  {
             Root<AddressEntity> root = delete.from(AddressEntity.class);
             delete.where(cb.equal(root.get("person").get("id"), id));
             entityManager.createQuery(delete).executeUpdate();
-
         }
 
         // Se passou nas validações acima eu transfiro as informações do model para entity
@@ -100,7 +99,7 @@ public class PersonServiceImpl implements PersonService  {
     @Override
     public void delete(Long id) {
         if (id == null)
-            throw new NegociationException("É preciso informar um Id válido");
+            throw new NegociationException("Pessoa não encontrada");
         repository.deleteById(id);
     }
 

@@ -18,7 +18,4 @@ public interface ClientJpaRepository extends JpaRepository<ClientEntity, Long> {
 
     @Query("select distinct c from ClientEntity c join fetch c.person left join c.dogs where c.id = :id")
     Optional<ClientProjection> getProjectionById(@Param("id") Long id);
-
-    @Query("from ClientEntity c join fetch c.person p where p.id = :id")
-    Optional<ClientEntity> findByPersonId(@Param("id") Long id);
 }

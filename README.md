@@ -6,7 +6,7 @@ A "VetClinicAPI" é uma API desenvolvida para atender às necessidades de uma cl
 
 #### /api/v1/pessoas (POST)
 
-- Todos os campos são obrigatórios
+- Todos os campos são obrigatórios e com limitação de caracteres
 
 - Document pode ser CPF ou CNPJ
 
@@ -40,7 +40,7 @@ A "VetClinicAPI" é uma API desenvolvida para atender às necessidades de uma cl
 
 #### /api/v1/pessoas/{id} (PUT)
 
-- Todos os campos são obrigatórios
+- Todos os campos são obrigatórios e com limitação de caracteres
 
 - Document pode ser CPF ou CNPJ
 
@@ -70,6 +70,78 @@ A "VetClinicAPI" é uma API desenvolvida para atender às necessidades de uma cl
   ]
 }
 ```
+
+#### /api/v1/clientes (POST)
+
+- O personId é obrigatório e deve existir
+
+```json
+{
+  "communicationPreferences": "email",
+  "alternatePhone": "28999505410",
+  "personId": 1
+}
+```
+
+#### /api/v1/clientes/{id} (PUT)
+
+- O personId é obrigatório e deve existir
+
+- Se o personId for diferente do id do objeto Person associado a entidade Client será lançado uma execeção
+
+- communicationPreferences só permite 100 caracteres e o alternatePhone 45.
+
+```json
+{
+  "communicationPreferences": "email",
+  "alternatePhone": "28999505410",
+  "personId": 1
+}
+```
+
+### /api/v1/enderecos (POST)
+
+- Quase todos os campos são obrigatórios, exceto complemento.
+
+- A identificação da pessoa é obrigatório
+
+- O CEP será validado através de uma API externa
+
+- O tipo deve ser WORK ou HOME
+
+```json
+{
+    "place": "São Joaquim",
+    "number": "100",
+    "complement": "Atrás da academia",
+    "cep": "29360-000",
+    "type": "HOME",
+    "personId": 1
+}
+
+```
+
+#### /api/v1/enderecos/{id}
+
+- Serão feitas as mesmas validações do method POST.
+
+- Caso o personId seja diferente do objeto Person já associado ao Address será lançado uma exceção.
+
+```json
+{
+    "place": "São Joaquim",
+    "number": "100",
+    "complement": "Atrás da academia",
+    "cep": "29360-000",
+    "type": "HOME",
+    "personId": 1
+}
+
+```
+
+### Relatórios
+
+Em breve
 
 ### Tecnologias
 

@@ -71,6 +71,9 @@ public class AddressServiceImpl implements AddressService {
         var entity = repository.findById(id)
             .orElseThrow(() -> new NegociationException("O endereço não está cadastrado"));
 
+        if (entity.getId() != model.personId())
+            throw new NegociationException("Esse endereço não pertence a pessoa especificada");
+
         if (!cepService.validate(cepService.normalizeCep(model.zipCode())))
             throw new NegociationException("O cep não foi encontrado");
 

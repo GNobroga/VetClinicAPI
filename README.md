@@ -176,5 +176,9 @@ Em breve
 
 - Flyway
 
+- Docker
+
+- DevContainer
+
 
 #### Feita por amor por mim <3

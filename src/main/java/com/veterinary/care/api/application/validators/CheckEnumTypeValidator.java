@@ -17,7 +17,7 @@ public class CheckEnumTypeValidator implements ConstraintValidator<CheckEnumType
 
         Field[] fields = clazz.getDeclaredFields();
 
-        for (var field: fields) {
+        for (var field : fields) {
             var annotation = field.getAnnotation(CheckEnumType.EnumType.class);
 
             if (annotation == null)
@@ -25,29 +25,31 @@ public class CheckEnumTypeValidator implements ConstraintValidator<CheckEnumType
 
             Class<?> targetClass = annotation.value();
 
-            if (!targetClass.isEnum()) 
+            if (!targetClass.isEnum())
                 continue;
 
-           
             Object[] constants = targetClass.getEnumConstants();
 
-           try {
+            try {
                 field.setAccessible(true);
                 var fieldValue = String.valueOf(field.get(value));
                 var exists = Arrays.stream(constants).anyMatch(x -> String.valueOf(x).equals(fieldValue));
 
                 if (!exists) {
                     context.disableDefaultConstraintViolation();
-                    var valuesAccepted = Arrays.stream(constants).map(x -> String.valueOf(x)).collect(Collectors.joining(","));
-                    context.buildConstraintViolationWithTemplate("O tipo enumerado para %s só aceita os valores: %s".formatted(targetClass.getSimpleName(), valuesAccepted))
-                        .addConstraintViolation();
+                    var valuesAccepted = Arrays.stream(constants).map(x -> String.valueOf(x))
+                            .collect(Collectors.joining(","));
+                    context.buildConstraintViolationWithTemplate("O tipo enumerado para %s só aceita os valores: %s"
+                            .formatted(targetClass.getSimpleName(), valuesAccepted))
+                            .addConstraintViolation();
                 }
 
                 return exists;
-           } catch (Exception error) {}
-            
+            } catch (Exception error) {
+            }
+
         }
         return false;
     }
-    
+
 }

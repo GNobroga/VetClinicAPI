@@ -6,7 +6,7 @@ public class CepConvert implements AttributeConverter<String, String> {
 
     @Override
     public String convertToDatabaseColumn(String attribute) {
-      return attribute.replaceAll("[^\\d]", "");
+        return attribute.replaceAll("[^\\d]", "");
     }
 
     @Override

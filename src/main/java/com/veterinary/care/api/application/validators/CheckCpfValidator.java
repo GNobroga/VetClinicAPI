@@ -1,11 +1,9 @@
 package com.veterinary.care.api.application.validators;
 
-
 import com.veterinary.care.api.application.validators.constraints.CheckDocument;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-
 
 public class CheckCpfValidator implements ConstraintValidator<CheckDocument, String> {
 
@@ -15,7 +13,7 @@ public class CheckCpfValidator implements ConstraintValidator<CheckDocument, Str
         if (!isValid) {
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate("Documento inválido, não é CPF e nem CNPJ.")
-                .addConstraintViolation();
+                    .addConstraintViolation();
         }
         return isValid;
     }
@@ -52,7 +50,8 @@ public class CheckCpfValidator implements ConstraintValidator<CheckDocument, Str
             secondDigit = 0;
         }
 
-        return Character.getNumericValue(document.charAt(9)) == firstDigit && Character.getNumericValue(document.charAt(10)) == secondDigit;
+        return Character.getNumericValue(document.charAt(9)) == firstDigit
+                && Character.getNumericValue(document.charAt(10)) == secondDigit;
     }
 
     public static boolean isCNPJ(String cnpj) {

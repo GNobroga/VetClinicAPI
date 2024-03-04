@@ -19,3 +19,6 @@ A "VetClinicAPI" é uma API desenvolvida para atender às necessidades de uma cl
 - Mapstruct
 
 - Spring Security
+
+
+#### Feita por amor por mim <3

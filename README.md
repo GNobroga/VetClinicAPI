@@ -1,6 +1,6 @@
 ## VetClinicAPI (Projeto em desenvolvimento)
 
-É uma API para gerenciar uma clínica veterinária, permitindo fazer operações de CRUD com validações, autenticação e diversos outros mecanismos.
+É uma API para gerenciar uma clínica veterinária, permitindo fazer operações de CRUD com validações, gerar relatórios, autenticação e diversos outros mecanismos.
 
 ### Diagrama Lógico
 

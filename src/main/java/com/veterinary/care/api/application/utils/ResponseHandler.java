@@ -14,12 +14,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResponseHandler<TResult> {
-    
+
     @RequiredArgsConstructor
     @Getter
     public enum Status {
         OK("ok"),
-        ERROR("error");
+        ERROR("error"),
+        NOT_FOUND("not_found");
         private final String status;
     }
 
@@ -58,5 +59,5 @@ public class ResponseHandler<TResult> {
     public void setCode(HttpStatus httpStatus) {
         this.code = String.valueOf(httpStatus.value());
     }
-   
+
 }

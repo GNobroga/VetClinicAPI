@@ -58,9 +58,11 @@ public class ClientServiceImpl implements ClientService {
         if (person.getType() != null && person.getType().equals(PersonType.VETERINARY))
             throw new NegociationException("Um veterinário não pode ser cliente, pois já tem um papel.");
 
+        if (person.getType() != null && person.getType().equals(PersonType.CLIENT))
+            throw new NegociationException("Essa pessoa já é um cliente");
+
         // Adicionar o type CLIENT na pessoa
         person.setType(PersonType.CLIENT);
-
 
         ClientEntity client = ClientEntity.builder()
             .person(person)
@@ -70,6 +72,9 @@ public class ClientServiceImpl implements ClientService {
        return repository.getProjectionById(repository.saveAndFlush(client).getId()).get();
     }
 
+    /**
+     * @param id Não será usado aqui, só está de enfeite
+     */
     @Transactional
     @SuppressWarnings("null")
     @Override
@@ -88,8 +93,6 @@ public class ClientServiceImpl implements ClientService {
 
         if (client == null)
             throw new NegociationException("Essa pessoa não é do tipo CLIENT");
-
-        System.out.println("OIII");
 
         person.setType(null);
         person.setClient(null);

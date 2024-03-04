@@ -1,16 +1,16 @@
 package com.veterinary.care.api.application.models;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
+@Schema(
+    name = "Veterinário",
+    description = "Exemplo de JSON a ser enviado",
+    example = "{\"specialty\":\"Cardiology\",\"crmv\":\"12345\",\"crmvUf\":\"SP\",\"personId\":1}"
+)
 public record RecordVeterinary(
-
-        @JsonProperty("registration")
-        @NotBlank(message = "A data de registro é obrigatório.")
-        String registrationDate,
 
         @Size(max = 255, message = "A especialidade pode ter no máximo 255 caracteres.")
         @NotBlank(message = "A especialidade é obrigatório.")
@@ -24,7 +24,6 @@ public record RecordVeterinary(
         @NotBlank(message = "O crmv é obrigatório.")
         String crmvUf,
 
-  
         @NotNull(message = "o personId é obrigatório.")
         Long personId
         ) {

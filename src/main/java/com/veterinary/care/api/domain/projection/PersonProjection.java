@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({"id","name","document","type","phone","birthDate","email","username","addresses"})
 public interface PersonProjection {
 
@@ -17,7 +18,6 @@ public interface PersonProjection {
 
     String getName();
 
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     String getType();
 
     String getDocument();

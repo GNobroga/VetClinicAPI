@@ -4,6 +4,8 @@ A "VetClinicAPI" é uma API desenvolvida para atender às necessidades de uma cl
 
 ### Endpoints
 
+Todos os Endpoints reconhecem **POST**, **DELETE**, **GET**, **PUT**.
+
 #### /api/v1/pessoas (POST)
 
 - Todos os campos são obrigatórios e com limitação de caracteres

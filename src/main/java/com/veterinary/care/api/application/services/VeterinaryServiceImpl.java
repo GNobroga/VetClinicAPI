@@ -54,8 +54,8 @@ public class VeterinaryServiceImpl implements VeterinaryService {
         if (personType != null || (personType != null && personType.equals(PersonType.CLIENT)))
             throw new NegociationException("Essa pessoa já possui um tipo associado");
 
-        repository.findByCrmv(model.crmv())
-                .orElseThrow(() -> new NegociationException("Já existe um veterinário com o crmv informado"));
+        if (repository.findByCrmv(model.crmv()).isPresent())
+            throw new NegociationException("Já existe um veterinário com o crmv informado");
 
         person.setType(PersonType.VETERINARY);
 
@@ -103,11 +103,17 @@ public class VeterinaryServiceImpl implements VeterinaryService {
         return repository.getProjectionById(id).get();
     }
 
+    @SuppressWarnings("null")
     @Transactional
     @Override
     public void delete(Long id) {
         if (id == null)
             throw new NegociationException("A identificação é obrigatória");
+
+        var veterinary = repository.findById(id)
+            .orElseThrow(() -> new NegociationException("Veterinário não existe"));
+
         repository.deleteById(id);
+        personJpaRepository.deleteById(veterinary.getPerson().getId());
     }
 }

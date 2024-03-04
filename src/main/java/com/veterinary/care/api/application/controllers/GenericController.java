@@ -1,6 +1,7 @@
 package com.veterinary.care.api.application.controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +42,7 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
     @Autowired
     protected S service;
 
+    @SuppressWarnings("null")
     @GetMapping
     @Operation(summary = "Retorna lista de objetos dessa entidade", description = "Descrição", responses = {
             @ApiResponse(description = "Retorna o objeto de resposta", responseCode = "200", content = {
@@ -56,12 +58,11 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
             @Parameter(name = "order", description = "ordenação ASC ou DESC", schema = @Schema(type = "string", defaultValue = "ASC")) @RequestParam(defaultValue = "ASC") String order) {
 
         pageNumber = pageNumber < 0 ? 0 : pageNumber;
-        pageSize = pageSize > 50 ? 50 : pageSize;
+        pageSize = pageSize < 1 ? 1 : pageSize > 50 ? 50 : pageSize;
 
-        order = order == null || (!order.equalsIgnoreCase("asc") || !order.equalsIgnoreCase("desc")) ? "ASC" : "DESC";
+        var direction = order == null || order.equalsIgnoreCase("asc") ? Sort.DEFAULT_DIRECTION : Sort.Direction.DESC;
 
-        var sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-        var data = service.findAll(PageRequest.of(pageNumber, pageSize, sortDirection, "id"));
+        var data = service.findAll(PageRequest.of(pageNumber, pageSize, direction, "id"));
         return new ResponseHandler<List<P>>(data);
     }
 

@@ -14,10 +14,10 @@ import com.veterinary.care.api.domain.projection.VeterinaryProjection;
 
 public interface VeterinaryJpaRepository extends JpaRepository<VeterinaryEntity, Long> {
 
-    @Query("from VeterinaryEntity ve join fetch person left join attendances")
+    @Query("from VeterinaryEntity ve join fetch person left join fetch attendances")
     Page<VeterinaryProjection> getAllProjections(Pageable pageable);
 
-    @Query("from VeterinaryEntity ve join fetch person left join attendances where ve.id = :id")
+    @Query("from VeterinaryEntity ve join fetch person left join fetch attendances where ve.id = :id")
     Optional<VeterinaryProjection> getProjectionById(@Param("id") Long id);
 
     Optional<VeterinaryEntity> findByCrmv(String crmv);

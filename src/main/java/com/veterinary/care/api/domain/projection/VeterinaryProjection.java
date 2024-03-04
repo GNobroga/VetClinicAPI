@@ -8,7 +8,22 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
+@JsonPropertyOrder({
+        "id",
+        "name",
+        "document",
+        "birthDate",
+        "username",
+        "crmv",
+        "crmvUf",
+        "phone",
+        "email",
+        "specialty",
+        "addresses",
+        "attendances"
+})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public interface VeterinaryProjection {
 
@@ -44,34 +59,50 @@ public interface VeterinaryProjection {
     List<AddressProjection> getAddresses();
 
     @Value("#{target.attendances}")
-    List<AttedanceProjection> getAttedances();
+    List<AttedanceProjection> getAttendances();
 
     interface AttedanceProjection {
         Long getId();
+
         LocalDateTime getAttendanceDate();
+
         String getDiagnosis();
+
         String getComments();
+
         Double getDogWeight();
+
         Double getDogHeight();
+
         String getDogTemperament();
+
         BigDecimal getPrice();
+
         @Value("#{target.dog}")
         DogProjection getDog();
     }
 
     interface AddressProjection {
         Long getId();
+
         String getPlace();
+
         String getNumber();
+
         String getComplement();
+
         String getZipCode();
+
         String getType();
     }
 
     interface DogProjection {
         Long getId();
+
         String getBreed();
+
         LocalDate getBirthDate();
+
         LocalDate getRegistrationDate();
     }
 }

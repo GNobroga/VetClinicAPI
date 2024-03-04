@@ -12,7 +12,6 @@ import com.veterinary.care.api.application.exceptions.NegociationException;
 import com.veterinary.care.api.application.interfaces.ClientService;
 import com.veterinary.care.api.application.mappers.ClientMapper;
 import com.veterinary.care.api.application.models.RecordClient;
-import com.veterinary.care.api.domain.entities.ClientEntity;
 import com.veterinary.care.api.domain.projection.ClientProjection;
 import com.veterinary.care.api.insfrastructure.ClientJpaRepository;
 import com.veterinary.care.api.insfrastructure.PersonJpaRepository;

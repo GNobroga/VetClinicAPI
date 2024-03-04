@@ -44,13 +44,6 @@ public interface ClientProjection {
     @Value("#{target.dogs}")
     List<DogProjection> getDogs();
 
-    interface DogProjection {
-        Long getId();
-        String getBreed();
-        LocalDate getBirthDate();
-        LocalDate getRegistrationDate();
-    }
-
     interface AddressProjection {
         Long getId();
         String getPlace();

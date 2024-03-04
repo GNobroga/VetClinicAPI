@@ -10,7 +10,7 @@ import com.veterinary.care.api.domain.projection.ClientProjection;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 
-@Tag(name = "Client", description = "CRUD para clientes")
+@Tag(name = "Clientes", description = "CRUD para clientes")
 @RequestMapping("/api/v1/clientes")
 @RestController
 public class ClientController extends GenericController<ClientEntity, RecordClient, ClientProjection, ClientService> {

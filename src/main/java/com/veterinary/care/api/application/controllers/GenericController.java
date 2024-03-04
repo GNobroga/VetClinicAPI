@@ -68,7 +68,9 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
         pageNumber = pageNumber < 0 ? 0 : pageNumber;
         pageSize = pageSize > 50 ? 50 : pageSize;
 
-        var sortDirection = order.equals("ASC") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        order = order == null || (!order.equalsIgnoreCase("asc") || !order.equalsIgnoreCase("desc")) ? "ASC" : "DESC";
+
+        var sortDirection = order.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
         var data = service.findAll(PageRequest.of(pageNumber, pageSize, sortDirection, "id"));
         return new ResponseHandler<List<P>>(data);
     }

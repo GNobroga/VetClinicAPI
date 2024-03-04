@@ -6,6 +6,17 @@ A "VetClinicAPI" é uma API desenvolvida para atender às necessidades de uma cl
 
 Todos os Endpoints reconhecem **POST**, **DELETE**, **GET**, **PUT**.
 
+#### /api/v1/[name] (GET)
+
+- Paginação através dos queries params **pageNumber**, **pageSize**, **order**
+
+- O **pageSize** é limitado a ter no máximo 50 de valor
+
+```bash
+    http://localhost:8080/api/v1/pessoas?pageNumber=1&pageSize=20&order=ASC
+```
+
+
 #### /api/v1/pessoas (POST)
 
 - Todos os campos são obrigatórios e com limitação de caracteres

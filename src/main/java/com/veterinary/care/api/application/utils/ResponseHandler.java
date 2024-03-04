@@ -20,6 +20,7 @@ public class ResponseHandler<TResult> {
     public enum Status {
         OK("ok"),
         ERROR("error"),
+        NO_CONTENT("no_content"),
         NOT_FOUND("not_found");
         private final String status;
     }

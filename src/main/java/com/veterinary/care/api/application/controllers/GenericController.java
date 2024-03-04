@@ -147,12 +147,12 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
             })
         }
     )
-    public ResponseEntity<?> onDeleteMethod(
+    public ResponseHandler<?> onDeleteMethod(
         @Parameter(name = "id", description =  "id da entidade a ser deletada")
         @PathVariable Long id
     ) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseHandler<>(Status.NO_CONTENT, HttpStatus.NO_CONTENT, null);
     }
 
 

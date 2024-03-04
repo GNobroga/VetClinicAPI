@@ -91,11 +91,11 @@ public class ClientController extends GenericController<ClientEntity, RecordClie
             })
         }
     )
-    public ResponseEntity<?> onDeleteMethod(
+    public ResponseHandler<?> onDeleteMethod(
         @Parameter(name = "id", description =  "id da pessoa entidade a ser deletada", hidden = false)
         @PathVariable Long id
     ) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return new ResponseHandler<>(Status.NO_CONTENT, HttpStatus.NO_CONTENT, null);
     }
 }

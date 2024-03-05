@@ -33,7 +33,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public List<AddressProjection> findAll(PageRequest pageRequest) {
-        return repository.findAllWithProjection(pageRequest).getContent();
+        return repository.getAllProjections(pageRequest).getContent();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressProjection create(RecordAddressWithPerson model) {
 
-        cepService.validateAndThrowIfInvalidCep(cepService.normalizeCep(model.zipCode()));
+        cepService.validateAndThrowIfInvalidCep(model.zipCode());
 
         var person = personJpaRepository.findById(model.personId())
                 .orElseThrow(CommonValidation.throwEntityNotfound("Pessoa"));
@@ -70,7 +70,7 @@ public class AddressServiceImpl implements AddressService {
         if (entity.getId() != model.personId())
             CommonValidation.throwBusinessRuleViolation("Esse endereço não pertence a pessoa especificada");
 
-        cepService.validateAndThrowIfInvalidCep(cepService.normalizeCep(model.zipCode()));
+        cepService.validateAndThrowIfInvalidCep(model.zipCode());
 
         if (entity.getPerson().getId() != model.personId())
             CommonValidation.throwBusinessRuleViolation("Identificação da pessoa diferente da prevista");

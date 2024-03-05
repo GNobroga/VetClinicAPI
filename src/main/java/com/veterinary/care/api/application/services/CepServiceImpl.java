@@ -17,6 +17,7 @@ public class CepServiceImpl implements CepService {
     @Override
     public void validateAndThrowIfInvalidCep(String cep) {
         try {
+            cep = normalizeCep(cep);
             RestTemplate restTemplate = new RestTemplate();
             var response = restTemplate.getForEntity(String.format("%s/%s/json", apiUrl, cep), JsonNode.class);
             var property = response.getBody().get("erro");

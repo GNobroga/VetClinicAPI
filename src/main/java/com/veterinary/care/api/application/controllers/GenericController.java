@@ -1,7 +1,9 @@
 package com.veterinary.care.api.application.controllers;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.hibernate.validator.internal.util.logging.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -41,6 +43,8 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
     @Autowired
     protected S service;
 
+    private Logger logger = Logger.getLogger(getClass().getName());
+
     @SuppressWarnings("null")
     @GetMapping
     @Operation(summary = "Retorna lista de objetos dessa entidade", description = "Descrição", responses = {
@@ -55,12 +59,11 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
             @Parameter(name = "pageNumber", description = "página desejada", schema = @Schema(type = "integer", defaultValue = "0")) @RequestParam(defaultValue = "0") int pageNumber,
             @Parameter(name = "pageSize", description = "quantidade de itens (limite é 50)", schema = @Schema(type = "integer", defaultValue = "10")) @RequestParam(defaultValue = "10") int pageSize,
             @Parameter(name = "order", description = "ordenação ASC ou DESC", schema = @Schema(type = "string", defaultValue = "ASC")) @RequestParam(defaultValue = "ASC") String order) {
-
+        
+        logger.info("Método onGetMethod() foi chamado com os parâmetros: pageNumber={%d}, pageSize={%d}, order={%s}".formatted(pageNumber, pageSize, order));
         pageNumber = pageNumber < 0 ? 0 : pageNumber;
         pageSize = pageSize < 1 ? 1 : pageSize > 50 ? 50 : pageSize;
-
-        var direction = order == null || order.equalsIgnoreCase("asc") ? Sort.DEFAULT_DIRECTION : Sort.Direction.DESC;
-
+        var direction = "asc".equalsIgnoreCase(order) ? Sort.DEFAULT_DIRECTION : Sort.Direction.DESC;
         var data = service.findAll(PageRequest.of(pageNumber, pageSize, direction, "id"));
         return new ResponseHandler<List<P>>(data);
     }
@@ -75,6 +78,7 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
             })
     })
     public ResponseHandler<P> onGetMethod(@PathVariable Long id) {
+        logger.info("Método onGetMethod() foi chamado com o ID: {}".formatted(id));
         return new ResponseHandler<P>(service.findById(id));
     }
 
@@ -90,6 +94,7 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
     })
     public ResponseHandler<P> onPostMethod(
             @RequestBody @Valid M model) {
+        logger.info("Método onPostMethod() foi chamado");
         return new ResponseHandler<>(Status.OK, HttpStatus.CREATED, service.create(model));
     }
 
@@ -106,6 +111,7 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
     public ResponseHandler<P> onPutMethod(
             @Parameter(name = "id", description = "id da entidade a ser atualizada") @PathVariable Long id,
             @RequestBody @Valid M model) {
+        logger.info("Método onPutMethod() foi chamado com o seguinte id: %d".formatted(id));
         return new ResponseHandler<>(Status.OK, HttpStatus.OK, service.update(id, model));
     }
 
@@ -122,6 +128,7 @@ public class GenericController<E extends BaseEntity, M, P, S extends GenericServ
     public ResponseHandler<?> onDeleteMethod(
             @Parameter(name = "id", description = "id da entidade a ser deletada") @PathVariable Long id) {
         service.delete(id);
+        logger.info("Método onDeleteMethod() foi chamado com o seguinte id: %d".formatted(id));
         return new ResponseHandler<>(Status.NO_CONTENT, HttpStatus.NO_CONTENT, null);
     }
 

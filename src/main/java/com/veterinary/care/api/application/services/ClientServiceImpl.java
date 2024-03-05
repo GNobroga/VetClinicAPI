@@ -1,5 +1,6 @@
 package com.veterinary.care.api.application.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,6 +57,7 @@ public class ClientServiceImpl implements ClientService {
         var client = mapper.toEntity(model);
         person.setClient(client);
         client.setPerson(person);
+        client.setRegistrationDate(LocalDateTime.now());
         return repository.getProjectionById(repository.saveAndFlush(client).getId()).get();
     }
 

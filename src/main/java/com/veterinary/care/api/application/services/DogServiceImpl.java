@@ -1,6 +1,6 @@
 package com.veterinary.care.api.application.services;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +52,7 @@ public class DogServiceImpl implements DogService {
         var entity = mapper.toEntity(model);
         client.getDogs().add(entity);
         entity.setClient(client);
-        entity.setRegistrationDate(LocalDate.now());
+        entity.setRegistrationDate(LocalDateTime.now());
         entity = repository.saveAndFlush(entity);
         return repository.getProjectionById(entity.getId()).get();
     }

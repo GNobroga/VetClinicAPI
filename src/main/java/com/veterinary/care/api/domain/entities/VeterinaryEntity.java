@@ -1,7 +1,7 @@
 package com.veterinary.care.api.domain.entities;
 
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +28,8 @@ import lombok.Setter;
 @Builder
 public class VeterinaryEntity extends BaseEntity {
 
-    @Column(name = "registration_date", nullable = false, columnDefinition = "DATE")
-    private LocalDate registrationDate;
+    @Column(name = "registration_date", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime registrationDate;
 
     @Column(name = "specialty", nullable = false, length = 255)
     private String specialty;

@@ -14,7 +14,7 @@ import com.veterinary.care.api.domain.projection.AddressProjection;
 public interface AddressJpaRepository extends JpaRepository<AddressEntity, Long> {
 
     @Query("from AddressEntity ae join fetch ae.person")
-    Page<AddressProjection> findAllWithProjection(Pageable pageable);
+    Page<AddressProjection> getAllProjections(Pageable pageable);
 
     @Query("from AddressEntity ae join fetch ae.person where ae.id = :id")
     Optional<AddressProjection> getProjectionById(@Param("id") Long id);

@@ -60,6 +60,9 @@ public class AttendanceServiceImpl implements AttendanceService {
                 .orElseThrow(CommonValidation.throwEntityNotfound("Veterinário"));
         var entity = mapper.toEntity(model);
         entity.setAttendanceDate(LocalDateTime.now());
+
+
+        dog.getAttendances().add(entity);
         entity.setDog(dog);
         entity.setClient(client);
         entity.setVeterinary(veterinary);

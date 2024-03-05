@@ -1,0 +1,1 @@
+alter table tb_attendances drop column user_id;

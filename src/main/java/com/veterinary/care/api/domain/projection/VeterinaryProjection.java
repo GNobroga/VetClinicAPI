@@ -32,7 +32,7 @@ public interface VeterinaryProjection {
     @Value("#{target.person.name}")
     String getName();
 
-    LocalDate getRegistrationDate();
+    LocalDateTime getRegistrationDate();
 
     @Value("#{target.person.document}")
     String getDocument();
@@ -103,6 +103,6 @@ public interface VeterinaryProjection {
 
         LocalDate getBirthDate();
 
-        LocalDate getRegistrationDate();
+        LocalDateTime getRegistrationDate();
     }
 }

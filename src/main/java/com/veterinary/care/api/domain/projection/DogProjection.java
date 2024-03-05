@@ -1,6 +1,7 @@
 package com.veterinary.care.api.domain.projection;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
@@ -10,7 +11,7 @@ public interface DogProjection {
     Long getId();
     String getName();
     String getBreed();
-    LocalDate getRegistrationDate();
+    LocalDateTime getRegistrationDate();
     LocalDate getBirthDate();
 
 }

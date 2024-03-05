@@ -34,7 +34,6 @@ public interface AttendanceMapper {
 
     @AfterMapping
     default void afterMapping(@MappingTarget AttendanceEntity target, RecordAttendance source) {
-        if (target.getPrice() == null)
-            target.setPrice(new BigDecimal(0));
+        target.setPrice(source.price() == null ? new BigDecimal(0) : source.price());
     }
 }

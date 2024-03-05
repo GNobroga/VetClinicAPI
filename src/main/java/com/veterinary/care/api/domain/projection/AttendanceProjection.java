@@ -2,6 +2,7 @@ package com.veterinary.care.api.domain.projection;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -9,13 +10,15 @@ import org.springframework.beans.factory.annotation.Value;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
-@JsonPropertyOrder("id")
+@JsonPropertyOrder({"id", "diagnosis", "comments", "price", "attendanceDate", "dogWeigth", "dogHeight", "dogTemperament"})
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public interface AttendanceProjection {
 
     Long getId();
 
     String getDiagnosis();
+
+    LocalDateTime getAttendanceDate();
 
     String getComments();
 
@@ -41,11 +44,11 @@ public interface AttendanceProjection {
         @Value("#{target.person.name}")
         String getName();
 
+        LocalDateTime getRegistrationDate();
+
         String getCommunicationPreferences();
 
         String getAlternatePhone();
-
-        LocalDate getRegistrationDate();
 
         @Value("#{target.person.document}")
         String getDocument();
@@ -64,9 +67,6 @@ public interface AttendanceProjection {
 
         @Value("#{target.person.addresses}")
         List<AddressProjection> getAddresses();
-
-        @Value("#{target.dogs}")
-        List<DogProjection> getDogs();
     }
 
     interface VeterinaryProjection {
@@ -75,13 +75,13 @@ public interface AttendanceProjection {
         @Value("#{target.person.name}")
         String getName();
 
-        LocalDate getRegistrationDate();
-
         @Value("#{target.person.document}")
         String getDocument();
 
         @Value("#{target.person.birthDate}")
         LocalDate getBirthDate();
+
+        LocalDateTime getRegistrationDate();
 
         @Value("#{target.person.phone}")
         String getPhone();

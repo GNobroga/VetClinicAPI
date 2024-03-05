@@ -1,5 +1,6 @@
 package com.veterinary.care.api.application.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class VeterinaryServiceImpl implements VeterinaryService {
 
         var personType = person.getType();
 
-        if (personType != null || (personType != null && personType.equals(PersonType.CLIENT)))
+        if (personType != null)
             CommonValidation.throwBusinessRuleViolation("Essa pessoa já possui um tipo associado");
 
         if (repository.findByCrmv(model.crmv()).isPresent())
@@ -64,6 +65,7 @@ public class VeterinaryServiceImpl implements VeterinaryService {
 
         person.setVeterinary(entity);
         entity.setPerson(person);
+        entity.setRegistrationDate(LocalDateTime.now());
 
         entity = repository.saveAndFlush(entity);
 
@@ -79,17 +81,13 @@ public class VeterinaryServiceImpl implements VeterinaryService {
         var entity = repository.findById(id)
                 .orElseThrow(CommonValidation.throwEntityNotfound("Veterinário"));
 
-        if (entity.getId() != model.personId())
-            CommonValidation.throwBusinessRuleViolation("Inconsistência nos dados do veterinário");
+        var person = entity.getPerson();
 
+        if (person.getId() != model.personId())
+            CommonValidation.throwBusinessRuleViolation("Inconsistência nos dados para atualização");
 
-        if (entity.getCrmv() != model.crmv() && repository.findByCrmv(model.crmv()).isPresent())
+        if (!entity.getCrmv().equalsIgnoreCase(model.crmv()) && repository.findByCrmv(model.crmv()).isPresent())
             CommonValidation.throwBusinessRuleViolation("Já existe um veterinário com o crmv informado");
-
-        var personId = model.personId();
-
-        var person = personJpaRepository
-                .findById(personId).orElseThrow((CommonValidation.throwEntityNotfound("Pessoa")));
 
         var personType = person.getType();
 

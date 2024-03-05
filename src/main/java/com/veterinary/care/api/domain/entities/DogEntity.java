@@ -1,6 +1,7 @@
 package com.veterinary.care.api.domain.entities;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +37,8 @@ public class DogEntity extends BaseEntity {
     @Column(name = "birth_date", nullable = true)
     private LocalDate birthDate;
 
-    @Column(name = "registration_date", nullable = false, columnDefinition = "DATE")
-    private LocalDate registrationDate;
+    @Column(name = "registration_date", nullable = false, columnDefinition = "TIMESTAMP")
+    private LocalDateTime registrationDate;
 
     @JoinColumn(name = "client_id", nullable = false)
     @ManyToOne

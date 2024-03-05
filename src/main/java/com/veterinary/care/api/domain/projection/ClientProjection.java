@@ -1,6 +1,7 @@
 package com.veterinary.care.api.domain.projection;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +22,7 @@ public interface ClientProjection {
 
     String getAlternatePhone();
 
-    LocalDate getRegistrationDate();
+    LocalDateTime getRegistrationDate();
 
     @Value("#{target.person.document}")
     String getDocument();

@@ -9,25 +9,22 @@ public class CheckCpfValidator implements ConstraintValidator<CheckDocument, Str
 
     @Override
     public boolean isValid(String document, ConstraintValidatorContext context) {
-        var isValid = isCPF(document) || isCNPJ(document);
-        if (!isValid) {
+        var isDocumentValid = isCPF(document) || isCNPJ(document);
+
+        if (!isDocumentValid) {
             context.disableDefaultConstraintViolation();
-            context.buildConstraintViolationWithTemplate("Documento inválido, não é CPF e nem CNPJ.")
+            context.buildConstraintViolationWithTemplate(
+                "Documento inválido, não é CPF e nem CNPJ.")
                     .addConstraintViolation();
         }
-        return isValid;
+        return isDocumentValid;
     }
 
     private static boolean isCPF(String document) {
         document = document.replaceAll("[^\\d]", "");
 
-        if (document.length() != 11) {
+        if (document.length() != 11 || document.matches("(\\d)\\1{10}")) 
             return false;
-        }
-
-        if (document.matches("(\\d)\\1{10}")) {
-            return false;
-        }
 
         int sum = 0;
         for (int i = 0; i < 9; i++) {

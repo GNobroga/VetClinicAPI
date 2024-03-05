@@ -26,7 +26,7 @@ import lombok.Setter;
 @Builder
 public class AttendanceEntity extends BaseEntity {
 
-    @Column(name = "attendance_date", nullable = false, columnDefinition = "DATE")
+    @Column(name = "attendance_date", nullable = false, columnDefinition = "TIMESTAMP")
     private LocalDateTime attendanceDate;
 
     @Column(name = "diagnosis", nullable = true)
@@ -52,10 +52,10 @@ public class AttendanceEntity extends BaseEntity {
     private DogEntity dog;
 
     @JoinColumn(name = "client_id", nullable = false)
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
     private ClientEntity client;
 
     @JoinColumn(name = "vet_id", nullable = false)
-    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH })
     private VeterinaryEntity veterinary;
 }

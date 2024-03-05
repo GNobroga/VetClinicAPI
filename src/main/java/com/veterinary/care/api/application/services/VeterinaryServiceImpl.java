@@ -7,10 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.veterinary.care.api.application.enums.PersonType;
-import com.veterinary.care.api.application.exceptions.NegociationException;
 import com.veterinary.care.api.application.interfaces.VeterinaryService;
 import com.veterinary.care.api.application.mappers.VeterinaryMapper;
 import com.veterinary.care.api.application.models.RecordVeterinary;
+import com.veterinary.care.api.application.utils.CommonValidation;
 import com.veterinary.care.api.domain.projection.VeterinaryProjection;
 import com.veterinary.care.api.insfrastructure.PersonJpaRepository;
 import com.veterinary.care.api.insfrastructure.VeterinaryJpaRepository;
@@ -35,8 +35,9 @@ public class VeterinaryServiceImpl implements VeterinaryService {
 
     @Override
     public VeterinaryProjection findById(Long id) {
+        CommonValidation.throwExceptionIfInvalidId(id, "Veterinário");
         return repository.getProjectionById(id)
-                .orElseThrow(() -> new NegociationException("Veterinário não encontrado"));
+                .orElseThrow(CommonValidation.throwEntityNotfound("Veterinário"));
     }
 
     @SuppressWarnings("null")
@@ -47,15 +48,15 @@ public class VeterinaryServiceImpl implements VeterinaryService {
         var personId = model.personId();
 
         var person = personJpaRepository
-                .findById(personId).orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+                .findById(personId).orElseThrow(CommonValidation.throwEntityNotfound("Pessoa"));
 
         var personType = person.getType();
 
         if (personType != null || (personType != null && personType.equals(PersonType.CLIENT)))
-            throw new NegociationException("Essa pessoa já possui um tipo associado");
+            CommonValidation.throwBusinessRuleViolation("Essa pessoa já possui um tipo associado");
 
         if (repository.findByCrmv(model.crmv()).isPresent())
-            throw new NegociationException("Já existe um veterinário com o crmv informado");
+            CommonValidation.throwBusinessRuleViolation("Já existe um veterinário com o crmv informado");
 
         person.setType(PersonType.VETERINARY);
 
@@ -73,33 +74,30 @@ public class VeterinaryServiceImpl implements VeterinaryService {
     @SuppressWarnings("null")
     @Override
     public VeterinaryProjection update(Long id, RecordVeterinary model) {
-        if (id == null)
-            throw new NegociationException("A identificação é obrigatória");
+        CommonValidation.throwExceptionIfInvalidId(id, "Veterinário");
 
         var entity = repository.findById(id)
-                .orElseThrow(() -> new NegociationException("Veterinário não encontrado"));
+                .orElseThrow(CommonValidation.throwEntityNotfound("Veterinário"));
 
         if (entity.getId() != model.personId())
-            throw new NegociationException(
-                    "A identificação do veterinário é diferente da que foi passada na requisição");
+            CommonValidation.throwBusinessRuleViolation("Inconsistência nos dados do veterinário");
+
 
         if (entity.getCrmv() != model.crmv() && repository.findByCrmv(model.crmv()).isPresent())
-            throw new NegociationException("Já existe um veterinário com o crmv informado");
+            CommonValidation.throwBusinessRuleViolation("Já existe um veterinário com o crmv informado");
 
         var personId = model.personId();
 
         var person = personJpaRepository
-                .findById(personId).orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+                .findById(personId).orElseThrow((CommonValidation.throwEntityNotfound("Pessoa")));
 
         var personType = person.getType();
 
         if (personType == null || !personType.equals(PersonType.VETERINARY))
-            throw new NegociationException("A pessoa associada a essa identificação não é um veterinário");
+            CommonValidation.throwBusinessRuleViolation("A pessoa associada a essa identificação não é um veterinário");
 
         mapper.toEntity(entity, model);
-
         repository.saveAndFlush(entity);
-
         return repository.getProjectionById(id).get();
     }
 
@@ -107,12 +105,9 @@ public class VeterinaryServiceImpl implements VeterinaryService {
     @Transactional
     @Override
     public void delete(Long id) {
-        if (id == null)
-            throw new NegociationException("A identificação é obrigatória");
-
+        CommonValidation.throwExceptionIfInvalidId(id, "Veterinário");
         var veterinary = repository.findById(id)
-            .orElseThrow(() -> new NegociationException("Veterinário não existe"));
-
+                .orElseThrow(CommonValidation.throwEntityNotfound("Veterinário"));
         repository.deleteById(id);
         personJpaRepository.deleteById(veterinary.getPerson().getId());
     }

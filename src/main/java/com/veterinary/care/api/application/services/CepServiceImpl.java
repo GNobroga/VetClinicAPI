@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.veterinary.care.api.application.interfaces.CepService;
+import com.veterinary.care.api.application.utils.CommonValidation;
 
 @Service
 public class CepServiceImpl implements CepService {
@@ -14,13 +15,15 @@ public class CepServiceImpl implements CepService {
 
     @SuppressWarnings("null")
     @Override
-    public boolean validate(String cep) {
+    public void validateAndThrowIfInvalidCep(String cep) {
         try {
             RestTemplate restTemplate = new RestTemplate();
             var response = restTemplate.getForEntity(String.format("%s/%s/json", apiUrl, cep), JsonNode.class);
-            return !response.getBody().path("erro").asText("success").equals("true");
+            var property = response.getBody().get("erro");
+            if (property != null)
+                throw new Exception();
         } catch (Exception ex) {
-            return false;
+            CommonValidation.throwBusinessRuleViolation("CEP inválido");
         }
     }
 

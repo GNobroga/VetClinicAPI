@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import com.veterinary.care.api.domain.entities.base.BaseEntity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -47,14 +48,14 @@ public class AttendanceEntity extends BaseEntity {
     private BigDecimal price;
 
     @JoinColumn(name = "dog_id", nullable = false)
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private DogEntity dog;
 
     @JoinColumn(name = "client_id", nullable = false)
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private ClientEntity client;
 
     @JoinColumn(name = "vet_id", nullable = false)
-    @ManyToOne
+    @ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private VeterinaryEntity veterinary;
 }

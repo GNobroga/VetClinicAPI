@@ -9,7 +9,7 @@ import com.veterinary.care.api.application.models.RecordPerson;
 import com.veterinary.care.api.domain.entities.PersonEntity;
 import com.veterinary.care.api.domain.entities.UserEntity;
 
-@Mapper(uses = { UserMapper.class, AddressMapper.class } )
+@Mapper(uses = { AddressMapper.class } )
 public interface PersonMapper {
 
     PersonMapper INSTANCE = Mappers.getMapper( PersonMapper.class );

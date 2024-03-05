@@ -15,6 +15,7 @@ public interface DogMapper {
     DogMapper INSTANCE = Mappers.getMapper(DogMapper.class);
 
     @Mappings({
+        @Mapping(target = "registrationDate", ignore = true),
         @Mapping(target = "attendances", ignore = true),
         @Mapping(target = "client", ignore = true)
     })
@@ -22,6 +23,7 @@ public interface DogMapper {
 
     @Mappings({
         @Mapping(target = "id", ignore = true),
+        @Mapping(target = "registrationDate", ignore = true),
         @Mapping(target = "attendances", ignore = true),
         @Mapping(target = "client", ignore = true)
     })

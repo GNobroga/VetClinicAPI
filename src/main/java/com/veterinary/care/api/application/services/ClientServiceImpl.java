@@ -1,6 +1,5 @@
 package com.veterinary.care.api.application.services;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +7,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.veterinary.care.api.application.enums.PersonType;
-import com.veterinary.care.api.application.exceptions.NegociationException;
 import com.veterinary.care.api.application.interfaces.ClientService;
 import com.veterinary.care.api.application.mappers.ClientMapper;
 import com.veterinary.care.api.application.models.RecordClient;
+import com.veterinary.care.api.application.utils.CommonValidation;
 import com.veterinary.care.api.domain.projection.ClientProjection;
 import com.veterinary.care.api.insfrastructure.ClientJpaRepository;
 import com.veterinary.care.api.insfrastructure.PersonJpaRepository;
@@ -36,11 +35,9 @@ public class ClientServiceImpl implements ClientService {
 
     @Override
     public ClientProjection findById(Long id) {
-        if (id == null)
-            throw new NegociationException("Identificação inválida");
-
+        CommonValidation.throwExceptionIfInvalidId(id, "Cliente");
         return repository.getProjectionById(id)
-                .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+                .orElseThrow(CommonValidation.throwEntityNotfound("Cliente"));
     }
 
     @Transactional
@@ -49,16 +46,10 @@ public class ClientServiceImpl implements ClientService {
     public ClientProjection create(RecordClient model) {
 
         var person = personJpaRepository.findById(model.personId())
-                .orElseThrow(() -> new NegociationException("Pessoa não existe"));
+                .orElseThrow(CommonValidation.throwEntityNotfound("Pessoa"));
 
-        var personType = person.getType();
-
-        if (personType != null) {
-            if (personType.equals(PersonType.VETERINARY))
-                throw new NegociationException("Um veterinário não pode ser cliente");
-            else
-                throw new NegociationException("Essa pessoa já é um cliente");
-        }
+        if (person.getType() != null)
+            CommonValidation.throwBusinessRuleViolation("Esse pesssoa jé tem um tipo associado.");
 
         // Adicionar o type CLIENT na pessoa
         person.setType(PersonType.CLIENT);
@@ -75,28 +66,25 @@ public class ClientServiceImpl implements ClientService {
         var personId = model.personId();
 
         var entity = repository.findById(id)
-                .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+                .orElseThrow(CommonValidation.throwEntityNotfound("Cliente"));
+        personJpaRepository.findById(personId)
+                .orElseThrow(CommonValidation.throwEntityNotfound("Pessoa"));
 
         if (entity.getId() != personId)
-            throw new NegociationException("A pessoa associada a esse cliente é diferente da que foi especificada");
-
-        personJpaRepository.findById(personId)
-                .orElseThrow(() -> new NegociationException("A pessoa não foi encontrada"));
-
+            CommonValidation.throwBusinessRuleViolation(
+                    "A pessoa associada a esse cliente é diferente da que foi especificada");
         mapper.toEntity(entity, model);
-
         repository.saveAndFlush(entity);
-
         return repository.getProjectionById(id).get();
     }
 
+    @Transactional
     @SuppressWarnings("null")
     @Override
     public void delete(Long id) {
-        if (id == null)
-            throw new NegociationException("Cliente não identificado");
+        CommonValidation.throwExceptionIfInvalidId(id, "Cliente");
         var client = repository.findById(id)
-                .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+                .orElseThrow(CommonValidation.throwEntityNotfound("Cliente"));
         repository.deleteById(id);
         personJpaRepository.deleteById(client.getPerson().getId());
     }

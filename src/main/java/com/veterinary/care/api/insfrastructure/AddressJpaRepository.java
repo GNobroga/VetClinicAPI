@@ -1,5 +1,7 @@
 package com.veterinary.care.api.insfrastructure;
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,6 +17,6 @@ public interface AddressJpaRepository extends JpaRepository<AddressEntity, Long>
     Page<AddressProjection> findAllWithProjection(Pageable pageable);
 
     @Query("from AddressEntity ae join fetch ae.person where ae.id = :id")
-    AddressProjection getProjectionById(@Param("id") Long id);
+    Optional<AddressProjection> getProjectionById(@Param("id") Long id);
 
 }

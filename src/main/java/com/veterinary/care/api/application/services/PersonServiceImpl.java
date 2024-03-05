@@ -6,10 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.veterinary.care.api.application.exceptions.NegociationException;
 import com.veterinary.care.api.application.interfaces.PersonService;
 import com.veterinary.care.api.application.mappers.PersonMapper;
 import com.veterinary.care.api.application.models.RecordPerson;
+import com.veterinary.care.api.application.utils.CommonValidation;
 import com.veterinary.care.api.domain.entities.AddressEntity;
 import com.veterinary.care.api.domain.projection.PersonProjection;
 import com.veterinary.care.api.insfrastructure.PersonJpaRepository;
@@ -38,47 +38,44 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     public PersonProjection findById(Long id) {
-        if (id == null)
-            throw new NegociationException("É necessário informar uma identificação válida");
+        CommonValidation.throwExceptionIfInvalidId(id, "Pessoa");
         return repository.getProjectionById(id)
-                .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+                .orElseThrow(CommonValidation.throwEntityNotfound("Pessoa"));
     }
 
     @Override
     @Transactional
     public PersonProjection create(RecordPerson model) {
         if (model.addresses().isEmpty())
-            throw new NegociationException("Cadastre pelo menos 1 endereço");
+            CommonValidation.throwBusinessRuleViolation("Cadastre pelo menos 1 endereço");
 
         if (!repository.findByEmailOrUsername(model.email(), model.username()).isEmpty())
-            throw new NegociationException("Email ou username não estão disponíveis para uso");
+            CommonValidation.throwBusinessRuleViolation("Email ou username não estão disponíveis para uso");
 
-        if (repository.findByDocument(normalizeDocument(model.document())).isPresent()) {
-            throw new NegociationException("Documento não está disponível para uso");
-        }
+        if (repository.findByDocument(normalizeDocument(model.document())).isPresent())
+            CommonValidation.throwBusinessRuleViolation("Documento não está disponível para uso");
 
         var entity = mapper.toEntity(model);
         entity.getAddresses().forEach(x -> x.setPerson(entity));
         return repository.getProjectionById(repository.save(entity).getId()).get();
     }
 
+    @SuppressWarnings("null")
     @Override
     @Transactional
     public PersonProjection update(Long id, RecordPerson model) {
-        if (id == null)
-            throw new NegociationException("É necessário informar um Id válido");
-
+        CommonValidation.throwExceptionIfInvalidId(id, "Pessoa");
         var user = repository.findById(id)
-                .orElseThrow(() -> new NegociationException("Pessoa não encontrada"));
+                .orElseThrow(CommonValidation.throwEntityNotfound("Pessoa"));
 
         if (!normalizeDocument(user.getDocument()).equals(normalizeDocument(model.document()))
                 && repository.findByDocument(model.document()).isPresent())
-            throw new NegociationException("Documento não está disponível para uso");
+            CommonValidation.throwBusinessRuleViolation("Documento não está disponível para uso");
 
         if ((!user.getUser().getUsername().equalsIgnoreCase(model.username())
                 && repository.findByUsername(model.username()).isPresent()) ||
                 (!user.getEmail().equalsIgnoreCase(model.email()) && repository.findByEmail(model.email()).isPresent()))
-            throw new NegociationException("Email ou username não estão disponíveis para uso");
+            CommonValidation.throwBusinessRuleViolation("Email ou username não estão disponíveis para uso");
 
         // Se o usuário mandar um endereço eu apago todos os existentes.
         if (!model.addresses().isEmpty()) {
@@ -99,10 +96,13 @@ public class PersonServiceImpl implements PersonService {
         return repository.getProjectionById(id).get();
     }
 
+    @Transactional
+    @SuppressWarnings("null")
     @Override
     public void delete(Long id) {
-        if (id == null)
-            throw new NegociationException("Pessoa não encontrada");
+        CommonValidation.throwExceptionIfInvalidId(id, "Pessoa");
+        repository.findById(id)
+                .orElseThrow(CommonValidation.throwEntityNotfound("Pessoa"));
         repository.deleteById(id);
     }
 

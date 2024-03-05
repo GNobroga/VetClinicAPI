@@ -6,6 +6,7 @@ networks:
 services:
 
   database:
+    container_name: db
     image: postgres
     environment:
       POSTGRES_USER: db

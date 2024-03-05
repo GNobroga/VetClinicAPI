@@ -7,10 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import com.veterinary.care.api.application.exceptions.NegociationException;
 import com.veterinary.care.api.application.interfaces.DogService;
 import com.veterinary.care.api.application.mappers.DogMapper;
 import com.veterinary.care.api.application.models.RecordDog;
+import com.veterinary.care.api.application.utils.CommonValidation;
 import com.veterinary.care.api.domain.projection.DogProjection;
 import com.veterinary.care.api.insfrastructure.ClientJpaRepository;
 import com.veterinary.care.api.insfrastructure.DogJpaRepository;
@@ -35,8 +35,9 @@ public class DogServiceImpl implements DogService {
 
     @Override
     public DogProjection findById(Long id) {
+        CommonValidation.throwExceptionIfInvalidId(id, "Cachorro");
         return repository.getProjectionById(id)
-            .orElseThrow(() -> new NegociationException("Cachorro não encontrado"));
+            .orElseThrow(CommonValidation.throwEntityNotfound("Cachorro"));
     }
 
     @Transactional
@@ -46,32 +47,30 @@ public class DogServiceImpl implements DogService {
 
         var client = clientJpaRepository
             .findById(model.clientId())
-            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+            .orElseThrow(CommonValidation.throwEntityNotfound("Cliente"));
 
         var entity = mapper.toEntity(model);
-
         client.getDogs().add(entity);
         entity.setClient(client);
         entity.setRegistrationDate(LocalDate.now());
-
         entity = repository.saveAndFlush(entity);
-
         return repository.getProjectionById(entity.getId()).get();
     }
 
+    @Transactional
     @SuppressWarnings("null")
     @Override
     public DogProjection update(Long id, RecordDog model) {
 
         var entity = repository.findById(id)
-            .orElseThrow(() -> new NegociationException("Cachorro não encontrado"));
+            .orElseThrow(CommonValidation.throwEntityNotfound("Cachorro"));
 
         var client = clientJpaRepository
             .findById(model.clientId())
-            .orElseThrow(() -> new NegociationException("Cliente não encontrado"));
+            .orElseThrow(CommonValidation.throwEntityNotfound("Cliente"));
 
         if (model.clientId() != client.getId())
-            throw new NegociationException("Cliente não corresponde ao que foi enviado");
+            CommonValidation.throwBusinessRuleViolation("Há uma inconsistência na identificação do cliente");
 
         mapper.toEntity(entity, model);
 
@@ -80,10 +79,13 @@ public class DogServiceImpl implements DogService {
         return repository.getProjectionById(id).get();
     }
 
+    @Transactional
+    @SuppressWarnings("null")
     @Override
     public void delete(Long id) {
-       if (id == null)
-            throw new NegociationException("A identificação é obrigatória");
+        CommonValidation.throwExceptionIfInvalidId(id, "Cachorro");
+        repository.findById(id)
+            .orElseThrow(CommonValidation.throwEntityNotfound("Cachorro"));
         repository.deleteById(id);
     }
 }

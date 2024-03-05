@@ -1,33 +1,25 @@
 swagger:
-    server-url: ${SERVER_URL}
-
+    server-url: http://localhost:8080
 spring:
     cache:
         type: redis
-
     data:
         redis:
             host: ${REDIS_HOST}
-            port: ${REDIS_PORT}
-
     devtools:
         restart:
             enabled: true
-
     datasource:
-        url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DATABASE}
-        username: ${POSTGRES_USER}
-        password: ${POSTGRES_PASSWORD}
+        url: jdbc:postgresql://db:5432/backend
+        username: db
+        password: db
         driver-class-name: org.postgresql.Driver
-
     jpa:
         hibernate:
             ddl-auto: validate
         show-sql: false
-
 springdoc:
     api-docs:
         path: /api-docs
-
 viacep-api:
     baseUrl: https://viacep.com.br/ws

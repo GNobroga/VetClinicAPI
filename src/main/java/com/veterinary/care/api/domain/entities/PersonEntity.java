@@ -66,5 +66,11 @@ public class PersonEntity extends BaseEntity {
     @Builder.Default
     @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<AddressEntity> addresses = new ArrayList<>();
+
+    public List<RoleEntity> getRoles() {
+        if (user == null || user.getRoles() == null)
+            return new ArrayList<>();
+        return user.getRoles();
+    }
 }
 

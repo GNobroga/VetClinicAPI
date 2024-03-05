@@ -6,6 +6,7 @@ import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import com.veterinary.care.api.application.models.RecordAttendance;
@@ -16,15 +17,19 @@ public interface AttendanceMapper {
 
     AttendanceMapper INSTANCE = Mappers.getMapper(AttendanceMapper.class);
 
-    @Mapping(target = "client", ignore = true)
-    @Mapping(target = "dog", ignore = true)
-    @Mapping(target = "veterinary", ignore = true)
+    @Mappings({
+        @Mapping(target = "client", ignore = true),
+        @Mapping(target = "dog", ignore = true),
+        @Mapping(target = "veterinary", ignore = true)
+    })
     AttendanceEntity toEntity(RecordAttendance source);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "client", ignore = true)
-    @Mapping(target = "dog", ignore = true)
-    @Mapping(target = "veterinary", ignore = true)
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "client", ignore = true),
+        @Mapping(target = "dog", ignore = true),
+        @Mapping(target = "veterinary", ignore = true)
+    })
     void toEntity(@MappingTarget AttendanceEntity target, RecordAttendance source);
 
     @AfterMapping

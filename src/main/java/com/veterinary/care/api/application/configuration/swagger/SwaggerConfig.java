@@ -14,7 +14,7 @@ import io.swagger.v3.oas.models.servers.Server;
 @Configuration
 public class SwaggerConfig {
 
-    @Value("${swagger.config.url}")
+    @Value("${swagger.server-url}")
     private String serverUrl;
 
     @Bean

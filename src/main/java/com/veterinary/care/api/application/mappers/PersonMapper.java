@@ -3,6 +3,7 @@ package com.veterinary.care.api.application.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import com.veterinary.care.api.application.models.RecordPerson;
@@ -14,11 +15,13 @@ public interface PersonMapper {
 
     PersonMapper INSTANCE = Mappers.getMapper( PersonMapper.class );
 
-    @Mapping(target = "type", ignore = true)
-    @Mapping(target = "client", ignore = true)
-    @Mapping(target = "veterinary", ignore = true)
-    @Mapping(target = "user", expression = "java(mapUsernameAndPasswordToUser(source.username(), source.password()))")
-    @Mapping(target = "email", expression = "java(source.email().toLowerCase())")
+   @Mappings({
+        @Mapping(target = "type", ignore = true),
+        @Mapping(target = "client", ignore = true),
+        @Mapping(target = "veterinary", ignore = true),
+        @Mapping(target = "user", expression = "java(mapUsernameAndPasswordToUser(source.username(), source.password()))"),
+        @Mapping(target = "email", expression = "java(source.email().toLowerCase())")
+   })
     PersonEntity toEntity(RecordPerson source);
 
     default UserEntity mapUsernameAndPasswordToUser(String username, String password) {
@@ -29,10 +32,13 @@ public interface PersonMapper {
             .build();
     }
 
-    @Mapping(target = "type", ignore = true)
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "client", ignore = true)
-    @Mapping(target = "veterinary", ignore = true)
-    @Mapping(target = "user", ignore = true)
+    @Mappings({
+        @Mapping(target = "type", ignore = true),
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "client", ignore = true),
+        @Mapping(target = "veterinary", ignore = true),
+        @Mapping(target = "user", ignore = true),
+        @Mapping(target = "roles", ignore = true)
+    })
     void toEntity(@MappingTarget PersonEntity target,  RecordPerson source);
 }

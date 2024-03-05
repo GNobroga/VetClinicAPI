@@ -6,19 +6,20 @@ networks:
 services:
 
   database:
-    container_name: db
+    container_name: ${POSTGRES_CONTAINER}
     image: postgres
     environment:
-      POSTGRES_USER: db
-      POSTGRES_PASSWORD: db
-      POSTGRES_DB: backend
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DATABASE}
     ports:
-      - 5432:5432
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
 
   cache:
+    container_name: ${REDIS_CONTAINER}
     image: redis
     ports:
-      - 6379:6379
+      - ${REDIS_PORT}:${REDIS_PORT}
 
   backend:
     build:
@@ -27,7 +28,7 @@ services:
     volumes:
       - .:/workspaces:cached
     ports:
-      - 8080:8080
+      - ${SERVER_PORT}:${SERVER_PORT}
     depends_on:
       - database
       - cache

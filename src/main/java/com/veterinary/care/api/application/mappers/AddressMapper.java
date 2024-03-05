@@ -3,6 +3,7 @@ package com.veterinary.care.api.application.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.Mappings;
 import org.mapstruct.factory.Mappers;
 
 import com.veterinary.care.api.application.models.RecordAddress;
@@ -20,7 +21,9 @@ public interface AddressMapper {
     @Mapping(target = "person", ignore = true)
     AddressEntity toEntity(RecordAddressWithPerson source);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "person", ignore = true)
+    @Mappings({
+        @Mapping(target = "id", ignore = true),
+        @Mapping(target = "person", ignore = true)
+    })
     void toEntity(@MappingTarget AddressEntity target, RecordAddressWithPerson source);
 }

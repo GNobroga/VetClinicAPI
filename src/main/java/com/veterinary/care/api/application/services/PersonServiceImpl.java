@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.veterinary.care.api.application.interfaces.PersonService;
@@ -28,6 +29,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     private PersonJpaRepository repository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private PersonMapper mapper = PersonMapper.INSTANCE;
 
@@ -56,6 +60,8 @@ public class PersonServiceImpl implements PersonService {
             CommonValidation.throwBusinessRuleViolation("Documento não está disponível para uso");
 
         var entity = mapper.toEntity(model);
+        var passwordCrypted = passwordEncoder.encode(entity.getUser().getPassword());
+        entity.getUser().setPassword(passwordCrypted);
         entity.getAddresses().forEach(x -> x.setPerson(entity));
         return repository.getProjectionById(repository.save(entity).getId()).get();
     }
@@ -89,7 +95,8 @@ public class PersonServiceImpl implements PersonService {
         // Se passou nas validações acima eu transfiro as informações do model para
         // entity
         mapper.toEntity(user, model);
-
+        var passwordCrypted = passwordEncoder.encode(user.getUser().getPassword());
+        user.getUser().setPassword(passwordCrypted);
         user.getAddresses().forEach(x -> x.setPerson(user));
         repository.saveAndFlush(user);
 

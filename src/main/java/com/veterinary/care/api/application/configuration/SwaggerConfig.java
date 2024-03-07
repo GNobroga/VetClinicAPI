@@ -1,4 +1,4 @@
-package com.veterinary.care.api.application.configuration.swagger;
+package com.veterinary.care.api.application.configuration;
 
 import java.util.Collections;
 

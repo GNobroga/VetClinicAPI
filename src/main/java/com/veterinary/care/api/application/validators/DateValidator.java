@@ -1,8 +1,6 @@
 package com.veterinary.care.api.application.validators;
 
 import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 
 import com.veterinary.care.api.application.validators.constraints.CheckDate;
 

@@ -23,3 +23,7 @@ springdoc:
         path: /api-docs
 viacep-api:
     baseUrl: https://viacep.com.br/ws
+
+jwt:
+    secret:
+        key: classpath:app.key

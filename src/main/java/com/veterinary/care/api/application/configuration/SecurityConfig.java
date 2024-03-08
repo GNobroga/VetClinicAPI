@@ -6,9 +6,9 @@ import java.util.Base64;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -31,11 +31,17 @@ import jakarta.annotation.PostConstruct;
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private static final String[] AUTH_WHITELIST = {
+        "/swagger-ui/**", 
+        "/api/v1/auth/**",
+        "/api-docs/**"
+    };
+
     private String secretKey;
 
     @PostConstruct
     void generateSecretKey() {
-        byte[] secretKeyBytes = new byte[32]; // 32 bytes = 256 bits (para HMAC SHA-256)
+        byte[] secretKeyBytes = new byte[32]; 
         new SecureRandom().nextBytes(secretKeyBytes);
         secretKey = Base64.getEncoder().encodeToString(secretKeyBytes);
     }
@@ -46,10 +52,10 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorizeRequests -> {
-                authorizeRequests.requestMatchers("/swagger-ui/**", "/api-docs/**", "/api/v1/auth/**").permitAll();
+                authorizeRequests.requestMatchers(AUTH_WHITELIST).permitAll();
+                authorizeRequests.requestMatchers(HttpMethod.POST, "/api/v1/pessoas/**").permitAll();
                 authorizeRequests.anyRequest().authenticated();
             })
-            .httpBasic(Customizer.withDefaults())
             .oauth2ResourceServer(config -> {
                 config.jwt(Customizer.withDefaults());
             })

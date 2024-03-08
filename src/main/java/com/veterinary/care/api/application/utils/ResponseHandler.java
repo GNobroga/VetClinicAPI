@@ -21,6 +21,7 @@ public class ResponseHandler<TResult> {
         OK("ok"),
         ERROR("error"),
         NO_CONTENT("no_content"),
+        UNAUTHORIZED("unauthorized"),
         NOT_FOUND("not_found");
         private final String status;
     }

@@ -10,6 +10,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.veterinary.care.api.application.exceptions.UnauthorizedException;
 import com.veterinary.care.api.application.interfaces.AuthenticationService;
 import com.veterinary.care.api.application.models.UsernameAndPassword;
 
@@ -26,16 +30,27 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @PostMapping
-    public String authenticate(@RequestBody @Valid UsernameAndPassword usernameAndPassword) {
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
+    @PostMapping("/signin")
+    public String authenticate(@RequestBody @Valid UsernameAndPassword usernameAndPassword) throws Exception {
+        try {
+            UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
             usernameAndPassword.username(), 
             usernameAndPassword.password());
-        
-        Authentication authentication = authenticationManager.authenticate(token);
+            
+            Authentication authentication = authenticationManager.authenticate(token);
 
-        return service.authenticate(authentication);
+            ObjectMapper objectMapper = new ObjectMapper();
+
+            JsonNode rootNode = objectMapper.createObjectNode();
+
+            ObjectNode objectNode = (ObjectNode) rootNode;
+
+            objectNode.put("token", service.authenticate(authentication));
+
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(rootNode);
+        } catch (Exception ex) {
+            throw new UnauthorizedException("Usuário ou senha incorretos");
+        }
     }
 
 

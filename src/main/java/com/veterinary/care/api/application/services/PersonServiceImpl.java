@@ -14,6 +14,7 @@ import com.veterinary.care.api.application.utils.CommonValidation;
 import com.veterinary.care.api.domain.entities.AddressEntity;
 import com.veterinary.care.api.domain.projection.PersonProjection;
 import com.veterinary.care.api.insfrastructure.PersonJpaRepository;
+import com.veterinary.care.api.insfrastructure.RoleJpaRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -32,6 +33,9 @@ public class PersonServiceImpl implements PersonService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RoleJpaRepository roleJpaRepository;
 
     private PersonMapper mapper = PersonMapper.INSTANCE;
 
@@ -62,6 +66,13 @@ public class PersonServiceImpl implements PersonService {
         var entity = mapper.toEntity(model);
         var passwordCrypted = passwordEncoder.encode(entity.getUser().getPassword());
         entity.getUser().setPassword(passwordCrypted);
+        var optionalRole = roleJpaRepository.findByName("USER");
+
+        if (optionalRole.isPresent()) {
+            var role = optionalRole.get();
+            entity.getUser().getRoles().add(role);
+        }
+
         entity.getAddresses().forEach(x -> x.setPerson(entity));
         return repository.getProjectionById(repository.save(entity).getId()).get();
     }

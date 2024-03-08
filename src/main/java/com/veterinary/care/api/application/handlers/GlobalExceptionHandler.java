@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import com.veterinary.care.api.application.exceptions.NegociationException;
+import com.veterinary.care.api.application.exceptions.UnauthorizedException;
 import com.veterinary.care.api.application.utils.ResponseHandler;
 import com.veterinary.care.api.application.utils.ResponseHandler.Status;
 
@@ -48,6 +49,16 @@ public class GlobalExceptionHandler {
         responseHandler.addMessage("Error interno");
         responseHandler.setStatus(Status.ERROR);
         responseHandler.setCode(HttpStatus.INTERNAL_SERVER_ERROR);
+        return responseHandler;
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+    public ResponseHandler<?> handleUnauthorizedException(UnauthorizedException ex) {
+        var responseHandler = new ResponseHandler<>();
+        responseHandler.addMessage("Não autorizado");
+        responseHandler.setStatus(Status.UNAUTHORIZED);
+        responseHandler.setCode(HttpStatus.UNAUTHORIZED);
         return responseHandler;
     }
 

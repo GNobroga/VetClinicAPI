@@ -11,7 +11,7 @@ public class DefaultController {
 
     @GetMapping
     public ModelAndView redirectToSwagger() {
-        return new ModelAndView("redirect:/swagger-ui.html");
+        return new ModelAndView("redirect:/swagger-ui/index.html");
     }
 
 }

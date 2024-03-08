@@ -54,7 +54,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests -> {
                 authorizeRequests.requestMatchers(AUTH_WHITELIST).permitAll();
                 authorizeRequests.requestMatchers(HttpMethod.POST, "/api/v1/pessoas/**").permitAll();
-                authorizeRequests.anyRequest().authenticated();
+                authorizeRequests.anyRequest().hasAuthority("SCOPE_USER");
             })
             .oauth2ResourceServer(config -> {
                 config.jwt(Customizer.withDefaults());

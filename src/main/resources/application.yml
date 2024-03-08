@@ -10,7 +10,7 @@ spring:
         restart:
             enabled: true
     datasource:
-        url: jdbc:postgresql://localhost:5432/backend
+        url: jdbc:postgresql://db:5432/backend
         username: db
         password: db
         driver-class-name: org.postgresql.Driver

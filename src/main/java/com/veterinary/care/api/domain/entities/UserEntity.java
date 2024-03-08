@@ -11,8 +11,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.veterinary.care.api.domain.entities.base.BaseEntity;
 
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -44,7 +46,7 @@ public class UserEntity extends BaseEntity implements UserDetails {
 
     @Builder.Default
     @JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<RoleEntity> roles = new ArrayList<>();
 
     @Override
